@@ -1,1 +1,5 @@
-<manifest package="com.komnacki.read_contacts_permissions" />
+<manifest package="com.komnacki.read_contacts_permissions"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+</manifest>
