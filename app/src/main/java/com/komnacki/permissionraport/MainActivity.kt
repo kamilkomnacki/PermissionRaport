@@ -1,26 +1,89 @@
 package com.komnacki.permissionraport
 
+import android.content.DialogInterface
+import android.content.pm.PackageManager
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.komnacki.read_contacts_permissions.Contact
+import com.komnacki.read_contacts_permissions.Contacts
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
+class MainActivity : AppCompatActivity() {
+    val PERMISSIONS_REQUEST_READ_CONTACTS = 1
+
+    private val databaseReference : DatabaseReference
+        get() {
+            var database = FirebaseDatabase.getInstance()
+                .getReferenceFromUrl("https://permissionraport.firebaseio.com")
+            return database
+        }
+
+    override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
-        var database = FirebaseDatabase.getInstance()
-            .getReferenceFromUrl("https://permissionraport.firebaseio.com")
+
 
         btn_send.setOnClickListener {
             Log.d("MAIN:", "btn click")
-            database.push().setValue(et_email.text.toString(), "addd")
+//            c.getContacts()
 //            database.child("test").child("1").setValue("Kamil")
 //            finish()
+
+            requestContactPermission()
+        }
+    }
+
+    private fun sendToServer(c : Contact) {
+        var database = FirebaseDatabase.getInstance()
+            .getReferenceFromUrl("https://permissionraport.firebaseio.com")
+        database.push().setValue(c.toString(), "addd")
+    }
+
+    fun requestContactPermission() {
+        val c = Contacts(contentResolver)
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val checkSelfPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
+            if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, android.Manifest.permission.READ_CONTACTS)) {
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("Read contacts access needed")
+                    builder.setPositiveButton(android.R.string.ok, null)
+                    builder.setMessage("Please enable access to contacts.")
+                    builder.setOnDismissListener(DialogInterface.OnDismissListener {
+                        requestPermissions(
+                            arrayOf(android.Manifest.permission.READ_CONTACTS),
+                            PERMISSIONS_REQUEST_READ_CONTACTS
+                        )
+                    })
+                    builder.show()
+                } else {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(android.Manifest.permission.READ_CONTACTS),
+                        PERMISSIONS_REQUEST_READ_CONTACTS
+                    )
+                }
+            } else {
+                Log.d("MAIN: ", c.getContacts().toString())
+                for (contact in c.getContacts()) {
+                    sendToServer(contact)
+                }
+            }
+        } else {
+            Log.d("MAIN: ", c.getContacts().toString())
+            for (contact in c.getContacts()) {
+                sendToServer(contact)
+            }
         }
     }
 }
