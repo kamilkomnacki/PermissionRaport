@@ -9,6 +9,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.komnacki.read_contacts_permissions.Contact
@@ -18,6 +20,17 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     val PERMISSIONS_REQUEST_READ_CONTACTS = 1
+    val defaultStatus : Boolean = false
+//    lateinit var PERMISSIONS_LIST : ArrayList<PermissionItem>
+
+
+//        PermissionItem("Kontakty", defaultStatus),
+//        PermissionItem("Wiadomości", defaultStatus),
+//        PermissionItem("Pamięć urządzenia", defaultStatus),
+//        PermissionItem("Aparat", defaultStatus),
+//        PermissionItem("Dyktafon", defaultStatus),
+//        PermissionItem("Galeria", defaultStatus)
+//    )
 
     private val databaseReference : DatabaseReference
         get() {
@@ -29,9 +42,22 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        var PERMISSIONS_LIST : ArrayList<PermissionItem> = ArrayList()
+        PERMISSIONS_LIST.add(PermissionItem("Kontakty", defaultStatus))
+        PERMISSIONS_LIST.add(PermissionItem("Wiadomosci", defaultStatus))
+        PERMISSIONS_LIST.add(PermissionItem("Pamięć urządzenia", defaultStatus))
+        PERMISSIONS_LIST.add(PermissionItem("Aparat", defaultStatus))
+        PERMISSIONS_LIST.add(PermissionItem("Dyktafon", defaultStatus))
+        PERMISSIONS_LIST.add(PermissionItem("Galeria", defaultStatus))
+
+        val recyclerView : RecyclerView = findViewById(R.id.recycler_view)
+        recyclerView.apply {
+            layoutManager = LinearLayoutManager(this@MainActivity)
+            adapter = PermissionListAdapter(PERMISSIONS_LIST)
+        }
+
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
-
 
         btn_send.setOnClickListener {
             Log.d("MAIN:", "btn click")
@@ -42,6 +68,7 @@ class MainActivity : AppCompatActivity() {
             requestContactPermission()
         }
     }
+
 
     private fun sendToServer(c : Contact) {
         var database = FirebaseDatabase.getInstance()

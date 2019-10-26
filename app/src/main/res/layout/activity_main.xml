@@ -10,7 +10,7 @@
         android:id="@+id/recycler_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/todo_item" />
+        tools:listitem="@layout/item_permission" />
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,7 +22,7 @@
 
         <EditText
             android:id="@+id/et_email"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:hint="E-mail"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,13 +32,11 @@
 
         <Button
             android:id="@+id/btn_send"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Send"
+            android:text="Wyślij\ndane"
+            style="@style/ButtonStyle"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
