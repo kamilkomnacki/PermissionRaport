@@ -1,2 +1,2 @@
-include ':app', ':core', ':read_contacts_permissions'
+include ':app', ':core', ':read_contacts_permissions', ':read_messages_permissions'
 rootProject.name='PermissionRaport'
