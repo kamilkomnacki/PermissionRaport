@@ -1,10 +1,16 @@
 package com.komnacki.permissionraport
 
+import android.annotation.TargetApi
 import android.content.DialogInterface
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
+import android.widget.Button
+import android.widget.EditText
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -20,17 +26,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
     val PERMISSIONS_REQUEST_READ_CONTACTS = 1
-    val defaultStatus : Boolean = false
-//    lateinit var PERMISSIONS_LIST : ArrayList<PermissionItem>
-
-
-//        PermissionItem("Kontakty", defaultStatus),
-//        PermissionItem("Wiadomości", defaultStatus),
-//        PermissionItem("Pamięć urządzenia", defaultStatus),
-//        PermissionItem("Aparat", defaultStatus),
-//        PermissionItem("Dyktafon", defaultStatus),
-//        PermissionItem("Galeria", defaultStatus)
-//    )
+    val MINIMUM_EMAIL_LENGHT = 5
 
     private val databaseReference : DatabaseReference
         get() {
@@ -42,19 +38,38 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        var PERMISSIONS_LIST : ArrayList<PermissionItem> = ArrayList()
-        PERMISSIONS_LIST.add(PermissionItem("Kontakty", defaultStatus))
-        PERMISSIONS_LIST.add(PermissionItem("Wiadomosci", defaultStatus))
-        PERMISSIONS_LIST.add(PermissionItem("Pamięć urządzenia", defaultStatus))
-        PERMISSIONS_LIST.add(PermissionItem("Aparat", defaultStatus))
-        PERMISSIONS_LIST.add(PermissionItem("Dyktafon", defaultStatus))
-        PERMISSIONS_LIST.add(PermissionItem("Galeria", defaultStatus))
 
         val recyclerView : RecyclerView = findViewById(R.id.recycler_view)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = PermissionListAdapter(PERMISSIONS_LIST)
+            adapter = PermissionListAdapter(PermissionsUtils.PERMISSIONS_LIST)
+
+
         }
+
+        val btn_sendData : Button = findViewById(R.id.btn_send)
+        val et_email : EditText = findViewById(R.id.et_email)
+
+        et_email.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(p0 : Editable?) {
+                if (validateEmail(p0.toString())) {
+                    btn_sendData.isEnabled = true
+                    btn_sendData.setTextColor(resources.getColor(R.color.colorTextDisabled))
+                } else {
+                    btn_sendData.isEnabled = false
+                    btn_sendData.setTextColor(resources.getColor(R.color.colorWhite))
+                }
+            }
+
+            override fun beforeTextChanged(p0 : CharSequence?, p1 : Int, p2 : Int, p3 : Int) {
+                //todo
+            }
+
+            override fun onTextChanged(p0 : CharSequence?, p1 : Int, p2 : Int, p3 : Int) {
+                //todo
+            }
+
+        })
 
 
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
@@ -65,9 +80,63 @@ class MainActivity : AppCompatActivity() {
 //            database.child("test").child("1").setValue("Kamil")
 //            finish()
 
-            requestContactPermission()
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                if (arePermissionsEnabled()) {
+                    Log.d("MAIN: ", "Permission granted")
+                    //                    permissions granted, continue flow normally
+                } else {
+                    Log.d("MAIN: ", "requestMultiplePermissions")
+                    requestMultiplePermissions()
+                }
+            }
+//            requestContactPermission()
         }
     }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private fun arePermissionsEnabled() : Boolean {
+        return PermissionsUtils.PERMISSIONS_LIST_2.none { checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED }
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.M)
+    private fun requestMultiplePermissions() {
+        val remainingPermissions = PermissionsUtils.PERMISSIONS_LIST_2.filter { checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED }
+        requestPermissions(remainingPermissions.toTypedArray(), 101)
+    }
+
+    @TargetApi(Build.VERSION_CODES.M)
+    override fun onRequestPermissionsResult(
+        requestCode : Int, permissions : Array<String>,
+        grantResults : IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == 101) {
+            if (grantResults.any { it != PackageManager.PERMISSION_GRANTED }) {
+                Log.d("MAIN: ", "There is permssions not granted!")
+                if (permissions.any { shouldShowRequestPermissionRationale(it) }) {
+                    Log.d("MAIN: ", "Permissions should show rationale!")
+                    AlertDialog.Builder(this)
+                        .setMessage("Your error message here")
+                        .setPositiveButton("Allow") { dialog, which -> requestMultiplePermissions() }
+                        .setNegativeButton("Cancel") { dialog, which -> dialog.dismiss() }
+                        .create()
+                        .show()
+                }
+            }
+            //all is good, continue flow
+        }
+    }
+
+
+    ///=====================================================================
+
+//    private fun requestPermission(permission : String) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            val checkSelfPermission = ContextCompat.checkSelfPermission(this, permission)
+//            if(checkSelfPermission != PackageManager.PERMISSION_GRANTED)
+//
+//        }
+//    }
 
 
     private fun sendToServer(c : Contact) {
@@ -112,5 +181,22 @@ class MainActivity : AppCompatActivity() {
                 sendToServer(contact)
             }
         }
+    }
+
+
+    fun validateEmail(email : String) : Boolean {
+        if (email.isNullOrEmpty() || email.isBlank()) {
+            return false
+        }
+
+        if (email.length < MINIMUM_EMAIL_LENGHT) {
+            return false
+        }
+
+        if (! email.contains("@", false) || ! email.contains(".", false)) {
+            return false
+        }
+
+        return true
     }
 }

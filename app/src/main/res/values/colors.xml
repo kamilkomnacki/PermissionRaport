@@ -7,4 +7,5 @@
     <color name="colorWhite">#FFFFFF</color>
     <color name="colorTextTitle">#808080</color>
     <color name="colorTextDescription">#808080</color>
+    <color name="colorTextDisabled">#dedede</color>
 </resources>
