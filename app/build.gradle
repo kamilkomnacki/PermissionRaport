@@ -39,5 +39,6 @@ dependencies {
 
     implementation 'androidx.recyclerview:recyclerview:1.0.0'
     api project(path: ':read_contacts_permissions')
+    api project(path: ':read_messages_permissions')
 }
 
