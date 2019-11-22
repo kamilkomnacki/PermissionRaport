@@ -2,7 +2,10 @@ package com.komnacki.permissionraport
 
 import com.google.gson.annotations.SerializedName
 
-class Contact {
+class ContactPOJO {
+    constructor()
+    constructor(id : Long, name : String, email : String, phoneNumber : String)
+
     @SerializedName("name")
     val name : String? = null
 
@@ -14,6 +17,7 @@ class Contact {
 
     @SerializedName("email")
     val email : String? = null
+
 
     override fun toString() : String {
         return "[name = $name, phone_number = $phone_number, id = $id, email = $email]"

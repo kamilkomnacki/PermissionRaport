@@ -1,7 +1,7 @@
 package com.komnacki.permissionraport
 
-//import com.komnacki.read_contacts_permissions.com.komnacki.permissionraport.Contacts
-//import com.komnacki.read_contacts_permissions.com.komnacki.permissionraport.Contacts
+//import com.komnacki.read_contacts_permissions.com.komnacki.permissionraport.ContactsPOJO
+//import com.komnacki.read_contacts_permissions.com.komnacki.permissionraport.ContactsPOJO
 
 import android.annotation.TargetApi
 import android.content.pm.PackageManager
@@ -19,6 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.gson.GsonBuilder
+import com.komnacki.read_contacts_permissions.Contacts
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -86,27 +88,12 @@ class MainActivity : AppCompatActivity() {
                 //                disposables.add()
             }
             val service : PermissionsService = PermissionsService()
-            service.getContacts()
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                    { message ->
-                        Log.d("Main: ", message.toString())
-                    },
-                    { error ->
-                        Log.d("Main Error", error.toString())
-                    }
-                )
-
-//            var service : Service = PermissionsService.retrofit.create(Service::class.java)
-//            var call : Observable<String> = service.helloWorld()
-
-//            call
+//            service.getContacts("wapnpoland@gmail.com")
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
 //                .subscribe(
 //                    { message ->
-//                        Log.d("Main", message)
+//                        Log.d("Main: ", message.toString())
 //                    },
 //                    { error ->
 //                        Log.d("Main Error", error.toString())
@@ -114,20 +101,30 @@ class MainActivity : AppCompatActivity() {
 //                )
 
 
-//            c.getContacts()
-//            database.child("test").child("1").setValue("Kamil")
-//            finish()
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (arePermissionsEnabled()) {
                     Log.d("MAIN: ", "Permission granted")
                     //                    permissions granted, continue flow normally
+                    var c = Contacts(contentResolver)
+                    Log.d("MAIN CONTACTS: GSON: ", GsonBuilder().create().toJson(c.getContacts().toString()))
+                    //[{"id": 2,"name": "Tomek","email": "tomek@hi.com","phone_number": "+48 320 992 332" },{"id": 4,"name": "Asia","email": "asia@hi.com","phone_number": "+48 231 226 211" }]
+                    service.sendContacts("wapnpoland@gmail.com", ContactsPOJO(c.getContacts()))
+                        .subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe(
+                            { response ->
+                                Log.d("MAIN: ", "contacts sent! $response")
+                            },
+                            { error ->
+                                Log.d("MAIN: ", "error during sending contacts: $error")
+                            }
+                        )
                 } else {
                     Log.d("MAIN: ", "requestMultiplePermissions")
                     requestMultiplePermissions()
                 }
             }
-//            requestContactPermission()
         }
     }
 
@@ -172,6 +169,8 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             //all is good, continue flow
+            var c = Contacts(contentResolver)
+            Log.d("MAIN CONTACTS: ", c.getContacts().toString())
         }
     }
 
@@ -188,14 +187,8 @@ class MainActivity : AppCompatActivity() {
 
 
     //TODO: TO na dole jest ok:
-//    private fun sendToServer(c : com.komnacki.permissionraport.Contacts) {
-//        var database = FirebaseDatabase.getInstance()
-//            .getReferenceFromUrl("https://permissionraport.firebaseio.com")
-//        database.push().setValue(c.toString(), "addd")
-//    }
-//
 //    fun requestContactPermission() {
-//        val c = com.komnacki.permissionraport.Contacts(contentResolver)
+//        val c = com.komnacki.permissionraport.ContactsPOJO(contentResolver)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            val checkSelfPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
 //            if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {
@@ -231,8 +224,6 @@ class MainActivity : AppCompatActivity() {
 //            }
 //        }
 //    }
-//
-//
     fun validateEmail(email : String) : Boolean {
 //        if (email.isNullOrEmpty() || email.isBlank()) {
 //            return false
