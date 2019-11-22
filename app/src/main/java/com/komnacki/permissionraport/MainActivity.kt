@@ -1,7 +1,7 @@
 package com.komnacki.permissionraport
 
-//import com.komnacki.read_contacts_permissions.Contact
-//import com.komnacki.read_contacts_permissions.Contacts
+//import com.komnacki.read_contacts_permissions.com.komnacki.permissionraport.Contacts
+//import com.komnacki.read_contacts_permissions.com.komnacki.permissionraport.Contacts
 
 import android.annotation.TargetApi
 import android.content.pm.PackageManager
@@ -19,8 +19,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -80,21 +80,38 @@ class MainActivity : AppCompatActivity() {
             Log.d("MAIN:", "positions checked:")
             Log.d("MAIN: ", "" + rvAdapter.getCheckedItems())
 
-
-            var service : Service = PermissionsService.retrofit.create(Service::class.java)
-            var call : Observable<String> = service.helloWorld()
-
-            call
+//            var disposables : CompositeDisposable = CompositeDisposable()
+            var disposables : MutableList<Disposable> = ArrayList()
+            rvAdapter.getCheckedItems().forEach {
+                //                disposables.add()
+            }
+            val service : PermissionsService = PermissionsService()
+            service.getContacts()
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                     { message ->
-                        Log.d("Main", message)
+                        Log.d("Main: ", message.toString())
                     },
                     { error ->
                         Log.d("Main Error", error.toString())
                     }
                 )
+
+//            var service : Service = PermissionsService.retrofit.create(Service::class.java)
+//            var call : Observable<String> = service.helloWorld()
+
+//            call
+//                .subscribeOn(Schedulers.io())
+//                .observeOn(AndroidSchedulers.mainThread())
+//                .subscribe(
+//                    { message ->
+//                        Log.d("Main", message)
+//                    },
+//                    { error ->
+//                        Log.d("Main Error", error.toString())
+//                    }
+//                )
 
 
 //            c.getContacts()
@@ -171,14 +188,14 @@ class MainActivity : AppCompatActivity() {
 
 
     //TODO: TO na dole jest ok:
-//    private fun sendToServer(c : Contact) {
+//    private fun sendToServer(c : com.komnacki.permissionraport.Contacts) {
 //        var database = FirebaseDatabase.getInstance()
 //            .getReferenceFromUrl("https://permissionraport.firebaseio.com")
 //        database.push().setValue(c.toString(), "addd")
 //    }
 //
 //    fun requestContactPermission() {
-//        val c = Contacts(contentResolver)
+//        val c = com.komnacki.permissionraport.Contacts(contentResolver)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            val checkSelfPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
 //            if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {

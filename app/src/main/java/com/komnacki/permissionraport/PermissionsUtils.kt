@@ -21,9 +21,9 @@ class PermissionsUtils(val activity : Activity, val context : Context) {
 //        }
         val PERMISSIONS_LIST : ArrayList<PermissionItem> = ArrayList(
             listOf(
-                PermissionItem("Kontakty", Manifest.permission.READ_CONTACTS, defaultStatus),
-                PermissionItem("Wiadomości", Manifest.permission.READ_SMS, defaultStatus),
-                PermissionItem("Pamięć urządzenia", Manifest.permission.READ_EXTERNAL_STORAGE, defaultStatus)
+                PermissionItem("Kontakty", Manifest.permission.READ_CONTACTS, defaultStatus, ""),
+                PermissionItem("Wiadomości", Manifest.permission.READ_SMS, defaultStatus, ""),
+                PermissionItem("Pamięć urządzenia", Manifest.permission.READ_EXTERNAL_STORAGE, defaultStatus, "")
 //                PermissionItem("Aparat", defaultStatus),
 //                PermissionItem("Dyktafon", defaultStatus),
 //                PermissionItem("Galeria", defaultStatus),
