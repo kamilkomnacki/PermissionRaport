@@ -41,12 +41,12 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val recyclerView : RecyclerView = findViewById(R.id.recycler_view)
+        val rvAdapter = PermissionListAdapter(PermissionsUtils.PERMISSIONS_LIST)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = PermissionListAdapter(PermissionsUtils.PERMISSIONS_LIST)
-
-
+            adapter = rvAdapter
         }
+
 
         val btn_sendData : Button = findViewById(R.id.btn_send)
         val et_email : EditText = findViewById(R.id.et_email)
@@ -77,6 +77,15 @@ class MainActivity : AppCompatActivity() {
 
         btn_send.setOnClickListener {
             Log.d("MAIN:", "btn click")
+            Log.d("MAIN:", "positions checked:")
+            for (i in 0 until rvAdapter.itemCount) {
+                if (rvAdapter.isPermissionSelected(i)) {
+                    Log.d("MAIN: ", "{$i} isChecked: " + rvAdapter.getItemName(i))
+                } else {
+                    Log.d("MAIN: ", "{$i} isNotChecked: " + rvAdapter.getItemName(i))
+                }
+            }
+
 
             var service : Service = PermissionsService.retrofit.create(Service::class.java)
             var call : Observable<String> = service.helloWorld()
@@ -204,17 +213,21 @@ class MainActivity : AppCompatActivity() {
 //
 //
     fun validateEmail(email : String) : Boolean {
-        if (email.isNullOrEmpty() || email.isBlank()) {
-            return false
-        }
-
-        if (email.length < MINIMUM_EMAIL_LENGHT) {
-            return false
-        }
-
-        if (! email.contains("@", false) || ! email.contains(".", false)) {
-            return false
-        }
+//        if (email.isNullOrEmpty() || email.isBlank()) {
+//            return false
+//        }
+//
+//        if (email.length < MINIMUM_EMAIL_LENGHT) {
+//            return false
+//        }
+//
+//        if (! (email.contains("@", false) || email.contains(".", false))) {
+//            return false
+//        }
+//
+//        if (! (email[0].isLetterOrDigit() && email.last().isLetter())) {
+//            return false
+//        }
 
         return true
     }
