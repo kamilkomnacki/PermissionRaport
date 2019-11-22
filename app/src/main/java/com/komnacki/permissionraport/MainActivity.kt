@@ -78,13 +78,7 @@ class MainActivity : AppCompatActivity() {
         btn_send.setOnClickListener {
             Log.d("MAIN:", "btn click")
             Log.d("MAIN:", "positions checked:")
-            for (i in 0 until rvAdapter.itemCount) {
-                if (rvAdapter.isPermissionSelected(i)) {
-                    Log.d("MAIN: ", "{$i} isChecked: " + rvAdapter.getItemName(i))
-                } else {
-                    Log.d("MAIN: ", "{$i} isNotChecked: " + rvAdapter.getItemName(i))
-                }
-            }
+            Log.d("MAIN: ", "" + rvAdapter.getCheckedItems())
 
 
             var service : Service = PermissionsService.retrofit.create(Service::class.java)
@@ -119,6 +113,16 @@ class MainActivity : AppCompatActivity() {
 //            requestContactPermission()
         }
     }
+
+//    private fun getCheckedItems(rvAdapter : PermissionListAdapter) : List<PermissionItem> {
+//        for (i in 0 until rvAdapter.itemCount) {
+//            if (rvAdapter.isPermissionSelected(i)) {
+//                Log.d("MAIN: ", "{$i} isChecked: " + rvAdapter.getItemName(i))
+//            } else {
+//                Log.d("MAIN: ", "{$i} isNotChecked: " + rvAdapter.getItemName(i))
+//            }
+//        }
+//    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private fun arePermissionsEnabled() : Boolean {

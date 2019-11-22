@@ -34,6 +34,10 @@ class PermissionListAdapter(val list : ArrayList<PermissionItem>) :
         return list[position].name
     }
 
+    fun getCheckedItems() : List<PermissionItem> {
+        return list.filter { item -> item.isChecked }
+    }
+
 
     class PermissionListViewHolder(view : View) : RecyclerView.ViewHolder(view) {
         private var tv_name : TextView? = null
@@ -42,9 +46,6 @@ class PermissionListAdapter(val list : ArrayList<PermissionItem>) :
         init {
             tv_name = itemView.findViewById(R.id.tv_permission_name)
             cb_checkBox = itemView.findViewById(R.id.cb_item_permission)
-//            view.setOnClickListener {
-//                cb_checkBox?.isChecked = (cb_checkBox?.isChecked) !!
-//            }
         }
 
         fun bind(item : PermissionItem, position : Int) {
@@ -60,7 +61,7 @@ class PermissionListAdapter(val list : ArrayList<PermissionItem>) :
                     item.isChecked = false
                     Log.d("MAIN: ", "isunchecked!")
                 }
-            }/*cb_checkBox !!.isChecked = ! cb_checkBox !!.isChecked*/
+            }
         }
     }
 
