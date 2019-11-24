@@ -18,9 +18,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.komnacki.read_contacts_permissions.Contacts
-import io.reactivex.android.schedulers.AndroidSchedulers
+import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
+import github.nisrulz.easydeviceinfo.base.EasyConfigMod
+import github.nisrulz.easydeviceinfo.base.RingerMode
 import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -98,32 +99,47 @@ class MainActivity : AppCompatActivity() {
 //                )
 
 
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                if (arePermissionsEnabled()) {
-                    Log.d("MAIN: ", "Permission granted")
-                    //                    permissions granted, continue flow normally
-                    var c = Contacts(contentResolver)
-                    var con = ContactsPOJO(c.getContacts())
-                    Log.d("MAIN", "Contacts: ${c.getContacts()}")
-                    service.sendContacts("wapnpoland@gmail.com", con)
-                        .concatWith(service.sendRaport("wapnpoland@gmail.com"))
-                        .subscribeOn(Schedulers.io())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe(
-                            { response ->
-                                Log.d("MAIN: ", "contacts sent! $response")
-                            },
-                            { error ->
-                                Log.d("MAIN: ", "error during sending contacts: $error")
-                            }
-                        )
-                } else {
-                    Log.d("MAIN: ", "requestMultiplePermissions")
-                    requestMultiplePermissions()
-                }
+            var easyConfigMod = EasyConfigMod(applicationContext)
+            @RingerMode
+            var ringerMode = easyConfigMod.deviceRingerMode
+            when (ringerMode) {
+                RingerMode.SILENT -> Log.d("Main", "RingerMode silent")
+                RingerMode.VIBRATE -> Log.d("Main", "RingerMode vibrate")
+                RingerMode.NORMAL -> Log.d("Main", "RingerMode normal")
             }
+
+            var easyBatteryMode = EasyBatteryMod(applicationContext)
+            @RingerMode
+            var batteryMode = easyBatteryMode.batteryPercentage
+            Log.d("Main", "Battery percentage: ${batteryMode}")
         }
     }
+    /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        if (arePermissionsEnabled()) {
+            Log.d("MAIN: ", "Permission granted")
+            //                    permissions granted, continue flow normally
+            var c = Contacts(contentResolver)
+            var con = ContactsPOJO(c.getContacts())
+            Log.d("MAIN", "Contacts: ${c.getContacts()}")
+            service.sendContacts("wapnpoland@gmail.com", con)
+                .concatWith(service.sendRaport("wapnpoland@gmail.com"))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                    { response ->
+                        Log.d("MAIN: ", "contacts sent! $response")
+                    },
+                    { error ->
+                        Log.d("MAIN: ", "error during sending contacts: $error")
+                    }
+                )
+        } else {
+            Log.d("MAIN: ", "requestMultiplePermissions")
+            requestMultiplePermissions()
+        }
+    }
+}
+}*/
 
 //    private fun getCheckedItems(rvAdapter : PermissionListAdapter) : List<PermissionItem> {
 //        for (i in 0 until rvAdapter.itemCount) {

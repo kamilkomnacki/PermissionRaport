@@ -1,2 +1,2 @@
-include ':app', ':core', ':read_contacts_permissions', ':read_messages_permissions'
+include ':app', ':core', ':read_contacts_permissions', ':read_messages_permissions', ':easydeviceinfo-base', ':easydeviceinfo-common'
 rootProject.name='PermissionRaport'

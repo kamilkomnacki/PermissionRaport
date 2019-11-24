@@ -10,6 +10,8 @@
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/easydeviceinfo-base" />
+            <option value="$PROJECT_DIR$/easydeviceinfo-common" />
             <option value="$PROJECT_DIR$/read_contacts_permissions" />
             <option value="$PROJECT_DIR$/read_messages_permissions" />
           </set>
