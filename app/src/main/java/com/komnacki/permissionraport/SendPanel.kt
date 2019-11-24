@@ -56,7 +56,11 @@ class SendPanel(context : Context, private var btn_view : Button, et_email : Edi
             return false
         }
 
-        if (email.indexOf('@') > email.lastIndexOf('.')) {
+        if (email.contains("..")) {
+            return false
+        }
+
+        if (email.indexOf('@') + 1 >= email.indexOf('.', email.indexOf('@'))) {
             return false
         }
 

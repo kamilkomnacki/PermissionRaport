@@ -4,10 +4,7 @@ package com.komnacki.permissionraport
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
-import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -33,35 +30,36 @@ class MainActivity : AppCompatActivity() {
             adapter = rvAdapter
         }
 
-        var sendButton = SendPanel(applicationContext, findViewById(R.id.btn_send), findViewById(R.id.et_email))
-
-//        setupSendButton()
+        var sendPanel = SendPanel(applicationContext, findViewById(R.id.btn_send), findViewById(R.id.et_email))
 
         //todo: Sprawdzyć czy można to wywalić:
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         btn_send.setOnClickListener {
-            Log.d("MAIN:", "btn click")
-            Log.d("MAIN:", "positions checked:")
-            Log.d("MAIN: ", "" + rvAdapter.getCheckedItems())
+            if (rvAdapter.getCheckedItems().isNullOrEmpty()) {
+                Log.d("MAIN", "No permissions selected!")
+            } else {
+                Log.d("MAIN:", "btn click")
+                Log.d("MAIN:", "positions checked:")
+                Log.d("MAIN: ", "" + rvAdapter.getCheckedItems())
 
-            val rxPermissions = RxPermissions(this)
-            rxPermissions
-                .request(Manifest.permission.CAMERA)
-                .subscribe { granted ->
-                    if (granted) {
-                        Log.d("MAIN", "Camera granted!")
-                    } else {
-                        Log.d("MAIN", "Camera not granted!")
+                val rxPermissions = RxPermissions(this)
+                rxPermissions
+                    .request(Manifest.permission.CAMERA)
+                    .subscribe { granted ->
+                        if (granted) {
+                            Log.d("MAIN", "Camera granted!")
+                        } else {
+                            Log.d("MAIN", "Camera not granted!")
+                        }
                     }
-                }
 
 //            var disposables : CompositeDisposable = CompositeDisposable()
 //            var disposables : MutableList<Disposable> = ArrayList()
 //            rvAdapter.getCheckedItems().forEach {
                 //                disposables.add()
 //            }
-            val service : PermissionsService = PermissionsService()
+                val service : PermissionsService = PermissionsService()
 //            service.getContacts("wapnpoland@gmail.com")
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
@@ -87,34 +85,10 @@ class MainActivity : AppCompatActivity() {
 //            } else {
 //                requestMultiplePermissions()
 //            }
+            }
         }
     }
 
-    private fun setupSendButton() {
-        et_email.addTextChangedListener(object : TextWatcher {
-            override fun afterTextChanged(email_input : Editable?) {
-            }
-
-            override fun beforeTextChanged(p0 : CharSequence?, p1 : Int, p2 : Int, p3 : Int) {
-                //todo
-            }
-
-            override fun onTextChanged(p0 : CharSequence?, p1 : Int, p2 : Int, p3 : Int) {
-                //todo
-            }
-
-        })
-    }
-
-    private fun setSendButtonEnable(isEnable : Boolean) {
-        val btn_sendData : Button = findViewById(R.id.btn_send)
-        btn_sendData.isEnabled = isEnable
-        if (isEnable) {
-            btn_sendData.setTextColor(resources.getColor(R.color.colorWhite))
-        } else {
-            btn_sendData.setTextColor(resources.getColor(R.color.colorTextDisabled))
-        }
-    }
     /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         if (arePermissionsEnabled()) {
             Log.d("MAIN: ", "Permission granted")
