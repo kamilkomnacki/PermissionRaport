@@ -27,6 +27,7 @@ android {
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' }
 }
 
 dependencies {
@@ -54,5 +55,7 @@ dependencies {
 
 
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
+
+    implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 }
 

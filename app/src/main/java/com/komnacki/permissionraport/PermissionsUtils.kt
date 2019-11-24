@@ -34,8 +34,10 @@ class PermissionsUtils(val activity : Activity, val context : Context) {
         )
 
         val PERMISSIONS_LIST_2 = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission
-                .ACCESS_FINE_LOCATION, Manifest.permission.READ_CONTACTS
+            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+            Manifest.permission.ACCESS_FINE_LOCATION,
+            Manifest.permission.READ_CONTACTS,
+            Manifest.permission.GET_ACCOUNTS
         )
     }
 
