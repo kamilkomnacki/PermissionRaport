@@ -39,7 +39,7 @@
             android:id="@+id/btn_send"
             style="@style/ButtonStyle"
             android:background="@drawable/background_btn_send_data"
-            android:enabled="false"
+            android:enabled="true"
             android:text="Wyślij\ndane"
             android:textColor="@color/colorTextDisabled"
             app:layout_constraintBottom_toBottomOf="parent"

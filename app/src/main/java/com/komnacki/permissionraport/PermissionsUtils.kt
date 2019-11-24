@@ -3,22 +3,12 @@ package com.komnacki.permissionraport
 import android.Manifest
 import android.app.Activity
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
-import android.util.Log
-import android.widget.Toast
-import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat.requestPermissions
-import androidx.core.content.PermissionChecker.checkSelfPermission
 
 
 class PermissionsUtils(val activity : Activity, val context : Context) {
     companion object {
         private var defaultStatus = false
 
-        //        val PL : Triple<String, String, Boolean> = {
-//
-//        }
         val PERMISSIONS_LIST : ArrayList<PermissionItem> = ArrayList(
             listOf(
                 PermissionItem("Kontakty", Manifest.permission.READ_CONTACTS, defaultStatus, ""),
@@ -31,13 +21,6 @@ class PermissionsUtils(val activity : Activity, val context : Context) {
 //                PermissionItem("Galeria3", defaultStatus),
 //                PermissionItem("Galeria4", defaultStatus)
             )
-        )
-
-        val PERMISSIONS_LIST_2 = arrayOf(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.READ_CONTACTS,
-            Manifest.permission.GET_ACCOUNTS
         )
     }
 
@@ -82,42 +65,42 @@ class PermissionsUtils(val activity : Activity, val context : Context) {
 //        }
 //    }
 
-    fun requestPermissions2() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (arePermissionsEnabled()) {
-                Toast.makeText(context, "PERMISSIONS GRANTED!", Toast.LENGTH_SHORT).show()
-                Log.d("MAIN: ", "permission granted")
-            } else {
-                Log.d("MAIN: ", "permission before request")
-                requestMultiplePermissions()
-                Log.d("MAIN: ", "permission after request")
-            }
-        }
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    private fun arePermissionsEnabled() : Boolean {
-        for (permission in PERMISSIONS_LIST) {
-            if (checkSelfPermission(context, permission.manifest) != PackageManager.PERMISSION_GRANTED) {
-                return false
-            }
-        }
-        return true
-    }
-
-    @RequiresApi(api = Build.VERSION_CODES.M)
-    fun requestMultiplePermissions() {
-        var remainingPermissions : MutableList<String> = ArrayList()
-        for (permission in PERMISSIONS_LIST) {
-            Log.d("MAIN: ", "permission: " + permission.name)
-            if (checkSelfPermission(context, permission.manifest) != PackageManager.PERMISSION_GRANTED) {
-                remainingPermissions.add(permission.manifest)
-            }
-        }
-        Log.d("MAIN: ", "list to grant: " + remainingPermissions.toString())
-
-
-//        requestPermissions(remainingPermissions.toArray(new String [remainingPermissions.size()]), 101);
-        requestPermissions(activity, remainingPermissions.toTypedArray(), 101)
-    }
+//    fun requestPermissions2() {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+//            if (arePermissionsEnabled()) {
+//                Toast.makeText(context, "PERMISSIONS GRANTED!", Toast.LENGTH_SHORT).show()
+//                Log.d("MAIN: ", "permission granted")
+//            } else {
+//                Log.d("MAIN: ", "permission before request")
+//                requestMultiplePermissions()
+//                Log.d("MAIN: ", "permission after request")
+//            }
+//        }
+//    }
+//
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    private fun arePermissionsEnabled() : Boolean {
+//        for (permission in PERMISSIONS_LIST) {
+//            if (checkSelfPermission(context, permission.manifest) != PackageManager.PERMISSION_GRANTED) {
+//                return false
+//            }
+//        }
+//        return true
+//    }
+//
+//    @RequiresApi(api = Build.VERSION_CODES.M)
+//    fun requestMultiplePermissions() {
+//        var remainingPermissions : MutableList<String> = ArrayList()
+//        for (permission in PERMISSIONS_LIST) {
+//            Log.d("MAIN: ", "permission: " + permission.name)
+//            if (checkSelfPermission(context, permission.manifest) != PackageManager.PERMISSION_GRANTED) {
+//                remainingPermissions.add(permission.manifest)
+//            }
+//        }
+//        Log.d("MAIN: ", "list to grant: " + remainingPermissions.toString())
+//
+//
+////        requestPermissions(remainingPermissions.toArray(new String [remainingPermissions.size()]), 101);
+//        requestPermissions(activity, remainingPermissions.toTypedArray(), 101)
+//    }
 }

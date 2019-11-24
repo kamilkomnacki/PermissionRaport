@@ -28,7 +28,7 @@ class SendPanel(context : Context, private var btn_view : Button, et_email : Edi
 
     fun setSendButtonEnable(isEnable : Boolean) {
         btn_view.isEnabled = isEnable
-        if (isEnable) {
+        if (true) {
             btn_view.setTextColor(colorEnabled)
         } else {
             btn_view.setTextColor(colorDisabled)

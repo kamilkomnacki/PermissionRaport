@@ -1,7 +1,6 @@
 package com.komnacki.permissionraport
 
 
-import android.Manifest
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -42,10 +41,12 @@ class MainActivity : AppCompatActivity() {
                 Log.d("MAIN:", "btn click")
                 Log.d("MAIN:", "positions checked:")
                 Log.d("MAIN: ", "" + rvAdapter.getCheckedItems())
+                var arrayOfCheckedPermissions : Array<String> = rvAdapter.getCheckedItems().map { per -> per.manifest }.toTypedArray()
+                Log.d("Main", "checked permissions: $arrayOfCheckedPermissions")
 
                 val rxPermissions = RxPermissions(this)
-                rxPermissions
-                    .request(Manifest.permission.CAMERA)
+                var disposable = rxPermissions
+                    .request(*arrayOfCheckedPermissions)
                     .subscribe { granted ->
                         if (granted) {
                             Log.d("MAIN", "Camera granted!")
