@@ -1,10 +1,10 @@
 package com.komnacki.permissionraport
 
-
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.RequiresApi
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -14,8 +14,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity() {
-    val PERMISSIONS_REQUEST_READ_CONTACTS = 1
+    companion object {
+        const val TAG : String = "MAIN"
+    }
     lateinit var sendPanel : SendPanel
+    lateinit var progressDialog : ProgressDialog
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState : Bundle?) {
@@ -29,30 +32,40 @@ class MainActivity : AppCompatActivity() {
             adapter = rvAdapter
         }
 
-        var sendPanel = SendPanel(applicationContext, findViewById(R.id.btn_send), findViewById(R.id.et_email))
+        sendPanel = SendPanel(applicationContext, findViewById(R.id.btn_send), findViewById(R.id.et_email))
+        progressDialog = ProgressDialog(this)
+
 
         //todo: Sprawdzyć czy można to wywalić:
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         btn_send.setOnClickListener {
+            progressDialog.show()
+
+            Log.d(TAG, "send click")
             if (rvAdapter.getCheckedItems().isNullOrEmpty()) {
-                Log.d("MAIN", "No permissions selected!")
+                Log.d(TAG, "No permissions selected!")
+                showDialogWithOK("Zaznacz pozwolenie!", "Zaznacz co najmniej jedno pozwolenie, aby aplikacja mogła wygenerowac raport.")
             } else {
-                Log.d("MAIN:", "btn click")
-                Log.d("MAIN:", "positions checked:")
-                Log.d("MAIN: ", "" + rvAdapter.getCheckedItems())
+                Log.d(TAG, "positions checked:")
                 var arrayOfCheckedPermissions : Array<String> = rvAdapter.getCheckedItems().map { per -> per.manifest }.toTypedArray()
-                Log.d("Main", "checked permissions: $arrayOfCheckedPermissions")
+                Log.d(TAG, "checked permissions: $arrayOfCheckedPermissions")
 
                 val rxPermissions = RxPermissions(this)
                 var disposable = rxPermissions
                     .request(*arrayOfCheckedPermissions)
                     .subscribe { granted ->
                         if (granted) {
-                            Log.d("MAIN", "Camera granted!")
+                            Log.d(TAG, "Permissions granted!")
+
                         } else {
-                            Log.d("MAIN", "Camera not granted!")
+                            Log.d(TAG, "Permissions not granted!")
+                            showDialogWithOK(
+                                "Zaakceptuj wszystkie pozwolenia!",
+                                "Nie wszystkie pozwolenia ,które zostały zaznaczone, zostały zaakceptowane. Upewnij się że pozwalasz aplikacji na wykorzystanie zaznaczonych zasobów i spróbój ponownie.\n\nJeśli aplikacja nie wyświetla prośby o udostępnienie zasobów urządzenia, sprawdź opcje aplikacji w ustawieniach systemu."
+                            )
                         }
+//                        progressDialog.hide()
                     }
 
 //            var disposables : CompositeDisposable = CompositeDisposable()
@@ -89,6 +102,18 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun showDialogWithOK(title : String, message : String) {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle(title)
+        builder.setPositiveButton(android.R.string.ok, null)
+        builder.setMessage(message)
+        builder.show()
+    }
+
+
+
+
 
     /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
         if (arePermissionsEnabled()) {

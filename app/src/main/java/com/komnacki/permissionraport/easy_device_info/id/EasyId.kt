@@ -1,4 +1,4 @@
-package com.komnacki.permissionraport.easy_id_mod
+package com.komnacki.permissionraport.easy_device_info.id
 
 import android.content.Context
 import github.nisrulz.easydeviceinfo.base.EasyIdMod

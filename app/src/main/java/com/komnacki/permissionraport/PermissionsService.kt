@@ -37,6 +37,7 @@ class PermissionsService {
         return api.getContacts(email)
     }
 
+
     fun sendContacts(email : String, contactsPOJO : ContactsPOJO) : Observable<ApiResponse> {
         Log.d(TAG, "sendContacts: $contactsPOJO")
         return api.sendContacts(email, contactsPOJO)

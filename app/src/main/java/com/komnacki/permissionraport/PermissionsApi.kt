@@ -7,6 +7,10 @@ import retrofit2.http.POST
 import retrofit2.http.Path
 
 interface PermissionsApi {
+    //    EasyDeviceInfo
+    @POST("/app/api/get/{email}/permission/CONTACTS")
+
+
     @GET("/app/api/get/{email}/permission/CONTACTS")
     fun getContacts(@Path("email") email : String) : Observable<ContactsPOJO>
 
