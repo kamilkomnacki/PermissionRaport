@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.FirebaseDatabase
 import com.tbruyelle.rxpermissions2.RxPermissions
+import io.reactivex.Observable
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -25,8 +26,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        val permissionsList = PermissionsList(this, applicationContext)
         val recyclerView : RecyclerView = findViewById(R.id.recycler_view)
-        val rvAdapter = PermissionListAdapter(PermissionsUtils.PERMISSIONS_LIST)
+        val rvAdapter = PermissionListAdapter(permissionsList.PERMISSIONS_LIST)
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = rvAdapter
@@ -40,12 +42,11 @@ class MainActivity : AppCompatActivity() {
         FirebaseDatabase.getInstance().setPersistenceEnabled(true)
 
         btn_send.setOnClickListener {
-            progressDialog.show()
 
             Log.d(TAG, "send click")
             if (rvAdapter.getCheckedItems().isNullOrEmpty()) {
                 Log.d(TAG, "No permissions selected!")
-                showDialogWithOK("Zaznacz pozwolenie!", "Zaznacz co najmniej jedno pozwolenie, aby aplikacja mogła wygenerowac raport.")
+                showCheckOnePermissionAlert()
             } else {
                 Log.d(TAG, "positions checked:")
                 var arrayOfCheckedPermissions : Array<String> = rvAdapter.getCheckedItems().map { per -> per.manifest }.toTypedArray()
@@ -56,14 +57,10 @@ class MainActivity : AppCompatActivity() {
                     .request(*arrayOfCheckedPermissions)
                     .subscribe { granted ->
                         if (granted) {
-                            Log.d(TAG, "Permissions granted!")
-
+                            handleData(rvAdapter.getCheckedItems().map { per -> per.objectClass })
                         } else {
                             Log.d(TAG, "Permissions not granted!")
-                            showDialogWithOK(
-                                "Zaakceptuj wszystkie pozwolenia!",
-                                "Nie wszystkie pozwolenia ,które zostały zaznaczone, zostały zaakceptowane. Upewnij się że pozwalasz aplikacji na wykorzystanie zaznaczonych zasobów i spróbój ponownie.\n\nJeśli aplikacja nie wyświetla prośby o udostępnienie zasobów urządzenia, sprawdź opcje aplikacji w ustawieniach systemu."
-                            )
+                            showPermissonsNotAcceptedAlert()
                         }
 //                        progressDialog.hide()
                     }
@@ -101,6 +98,30 @@ class MainActivity : AppCompatActivity() {
 //            }
             }
         }
+    }
+
+    private fun handleData(arrayOfCheckedPermissions : List<PojoFeeder>) {
+        progressDialog.show()
+        var pojos = ArrayList<Observable<out POJO>>()
+        arrayOfCheckedPermissions.forEach { it ->
+            Log.d(TAG, "per: $it")
+            pojos.add(it.getPOJO())
+        }
+        var disposable = Observable.concat(pojos)
+            .subscribe { result ->
+                Log.d(TAG, result.toString())
+            }
+    }
+
+    private fun showPermissonsNotAcceptedAlert() {
+        showDialogWithOK(
+            "Zaakceptuj wszystkie pozwolenia!",
+            "Nie wszystkie pozwolenia ,które zostały zaznaczone, zostały zaakceptowane. Upewnij się że pozwalasz aplikacji na wykorzystanie zaznaczonych zasobów i spróbój ponownie.\n\nJeśli aplikacja nie wyświetla prośby o udostępnienie zasobów urządzenia, sprawdź opcje aplikacji w ustawieniach systemu."
+        )
+    }
+
+    private fun showCheckOnePermissionAlert() {
+        showDialogWithOK("Zaznacz pozwolenie!", "Zaznacz co najmniej jedno pozwolenie, aby aplikacja mogła wygenerowac raport.")
     }
 
     private fun showDialogWithOK(title : String, message : String) {
@@ -154,13 +175,13 @@ class MainActivity : AppCompatActivity() {
 
 //    @RequiresApi(api = Build.VERSION_CODES.M)
 //    private fun requestMultiplePermissions() {
-//        val remainingPermissions = PermissionsUtils.PERMISSIONS_LIST_2.filter { checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED }
+//        val remainingPermissions = PermissionsList.PERMISSIONS_LIST_2.filter { checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED }
 //        requestPermissions(remainingPermissions.toTypedArray(), 101)
 //    }
 //
 //    @RequiresApi(api = Build.VERSION_CODES.M)
 //    private fun arePermissionsEnabled() : Boolean {
-//        return PermissionsUtils.PERMISSIONS_LIST_2.none { checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED }
+//        return PermissionsList.PERMISSIONS_LIST_2.none { checkSelfPermission(it) != PackageManager.PERMISSION_GRANTED }
 //    }
 //
 //    @TargetApi(Build.VERSION_CODES.M)

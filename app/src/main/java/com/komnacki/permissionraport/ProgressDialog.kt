@@ -46,4 +46,8 @@ class ProgressDialog(context : Context) {
     fun setProgress(value : Int) {
         progressBar.progress = value
     }
+
+    fun setDescription(text : String) {
+        description.text = text
+    }
 }

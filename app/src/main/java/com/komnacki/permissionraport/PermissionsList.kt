@@ -3,17 +3,21 @@ package com.komnacki.permissionraport
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import com.komnacki.permissionraport.easy_device_info.id.EasyId
 
 
-class PermissionsUtils(val activity : Activity, val context : Context) {
-    companion object {
-        private var defaultStatus = false
+class PermissionsList(val activity : Activity, val context : Context) {
 
-        val PERMISSIONS_LIST : ArrayList<PermissionItem> = ArrayList(
+    private var defaultStatus = false
+    lateinit var PERMISSIONS_LIST : ArrayList<PermissionItem>
+
+    init {
+        PERMISSIONS_LIST = ArrayList(
             listOf(
-                PermissionItem("Kontakty", Manifest.permission.READ_CONTACTS, defaultStatus, ""),
-                PermissionItem("Wiadomości", Manifest.permission.READ_SMS, defaultStatus, ""),
-                PermissionItem("Pamięć urządzenia", Manifest.permission.READ_EXTERNAL_STORAGE, defaultStatus, "")
+                PermissionItem("Kontakty", Manifest.permission.READ_CONTACTS, defaultStatus, "", EasyId(context)),
+                PermissionItem("Wiadomości", Manifest.permission.READ_SMS, defaultStatus, "", EasyId(context)),
+                PermissionItem("Pamięć urządzenia", Manifest.permission.READ_EXTERNAL_STORAGE, defaultStatus, "", EasyId(context)),
+                PermissionItem("Podpięte konta email", Manifest.permission.GET_ACCOUNTS, defaultStatus, "", EasyId(context))
 //                PermissionItem("Aparat", defaultStatus),
 //                PermissionItem("Dyktafon", defaultStatus),
 //                PermissionItem("Galeria", defaultStatus),
