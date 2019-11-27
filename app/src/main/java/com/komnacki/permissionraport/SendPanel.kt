@@ -13,9 +13,11 @@ class SendPanel(context : Context, private var btn_view : Button, et_email : Edi
 
     private var colorDisabled : Int = context.resources.getColor(R.color.colorTextDisabled)
     private var colorEnabled : Int = context.resources.getColor(R.color.colorWhite)
+    private var currentEmail : String = ""
 
     override fun afterTextChanged(email_input : Editable?) {
-        setSendButtonEnable(validateEmail(email_input.toString()))
+        currentEmail = email_input.toString()
+        setSendButtonEnable(validateEmail(currentEmail))
     }
 
     override fun beforeTextChanged(p0 : CharSequence?, p1 : Int, p2 : Int, p3 : Int) {
@@ -33,6 +35,10 @@ class SendPanel(context : Context, private var btn_view : Button, et_email : Edi
         } else {
             btn_view.setTextColor(colorDisabled)
         }
+    }
+
+    fun getEmail() : String {
+        return currentEmail
     }
 
     private fun validateEmail(email : String) : Boolean {

@@ -8,7 +8,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
-class PermissionListAdapter(val list : ArrayList<PermissionItem>) :
+class PermissionListAdapter(val list : List<PermissionItem>) :
     RecyclerView.Adapter<PermissionListAdapter.PermissionListViewHolder>() {
     override fun onCreateViewHolder(parent : ViewGroup, viewType : Int) : PermissionListViewHolder {
         val inflater = LayoutInflater.from(parent.context)

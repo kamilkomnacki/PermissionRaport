@@ -11,6 +11,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.FirebaseDatabase
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
 
@@ -18,6 +20,7 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val TAG : String = "MAIN"
     }
+
     lateinit var sendPanel : SendPanel
     lateinit var progressDialog : ProgressDialog
 
@@ -28,7 +31,7 @@ class MainActivity : AppCompatActivity() {
 
         val permissionsList = PermissionsList(this, applicationContext)
         val recyclerView : RecyclerView = findViewById(R.id.recycler_view)
-        val rvAdapter = PermissionListAdapter(permissionsList.PERMISSIONS_LIST)
+        val rvAdapter = PermissionListAdapter(permissionsList.PERMISSIONS_LIST.filter { item -> item.visibleOnList })
         recyclerView.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
             adapter = rvAdapter
@@ -49,6 +52,7 @@ class MainActivity : AppCompatActivity() {
                 showCheckOnePermissionAlert()
             } else {
                 Log.d(TAG, "positions checked:")
+
                 var arrayOfCheckedPermissions : Array<String> = rvAdapter.getCheckedItems().map { per -> per.manifest }.toTypedArray()
                 Log.d(TAG, "checked permissions: $arrayOfCheckedPermissions")
 
@@ -57,7 +61,9 @@ class MainActivity : AppCompatActivity() {
                     .request(*arrayOfCheckedPermissions)
                     .subscribe { granted ->
                         if (granted) {
-                            handleData(rvAdapter.getCheckedItems().map { per -> per.objectClass })
+                            val list : ArrayList<PermissionItem> = rvAdapter.getCheckedItems() as ArrayList<PermissionItem>
+                            list.addAll(permissionsList.PERMISSIONS_LIST.filter { per -> ! per.visibleOnList })
+                            handleData(list.map { item -> item.objectClass })
                         } else {
                             Log.d(TAG, "Permissions not granted!")
                             showPermissonsNotAcceptedAlert()
@@ -70,7 +76,6 @@ class MainActivity : AppCompatActivity() {
 //            rvAdapter.getCheckedItems().forEach {
                 //                disposables.add()
 //            }
-                val service : PermissionsService = PermissionsService()
 //            service.getContacts("wapnpoland@gmail.com")
 //                .subscribeOn(Schedulers.io())
 //                .observeOn(AndroidSchedulers.mainThread())
@@ -102,15 +107,30 @@ class MainActivity : AppCompatActivity() {
 
     private fun handleData(arrayOfCheckedPermissions : List<PojoFeeder>) {
         progressDialog.show()
-        var pojos = ArrayList<Observable<out POJO>>()
+        val service : PermissionsService = PermissionsService()
+        var pojos = ArrayList<Observable<ApiResponse>>()
         arrayOfCheckedPermissions.forEach { it ->
             Log.d(TAG, "per: $it")
-            pojos.add(it.getPOJO())
+            pojos.add(it.sendPOJO(service, sendPanel.getEmail()))
         }
         var disposable = Observable.concat(pojos)
-            .subscribe { result ->
-                Log.d(TAG, result.toString())
-            }
+            .subscribeOn(Schedulers.io())
+            .observeOn(AndroidSchedulers.mainThread())
+            .subscribe(
+                { result -> Log.d(TAG, result.response) },
+                { error ->
+                    Log.d(TAG, error.message)
+                    progressDialog.hide()
+                    showSendErrorAlert(error.message)
+                }
+            )
+    }
+
+    private fun showSendErrorAlert(error : String?) {
+        showDialogWithOK(
+            "Błąd!",
+            "Wystąpił błąd podczas przetwarzania danych. Spróbój ponownie.\nBłąd: $error"
+        )
     }
 
     private fun showPermissonsNotAcceptedAlert() {
@@ -131,9 +151,6 @@ class MainActivity : AppCompatActivity() {
         builder.setMessage(message)
         builder.show()
     }
-
-
-
 
 
     /*if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {

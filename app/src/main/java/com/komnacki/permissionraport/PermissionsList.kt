@@ -3,6 +3,7 @@ package com.komnacki.permissionraport
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import com.komnacki.permissionraport.easy_device_info.baterry.EasyBattery
 import com.komnacki.permissionraport.easy_device_info.id.EasyId
 
 
@@ -14,10 +15,12 @@ class PermissionsList(val activity : Activity, val context : Context) {
     init {
         PERMISSIONS_LIST = ArrayList(
             listOf(
-                PermissionItem("Kontakty", Manifest.permission.READ_CONTACTS, defaultStatus, "", EasyId(context)),
-                PermissionItem("Wiadomości", Manifest.permission.READ_SMS, defaultStatus, "", EasyId(context)),
-                PermissionItem("Pamięć urządzenia", Manifest.permission.READ_EXTERNAL_STORAGE, defaultStatus, "", EasyId(context)),
-                PermissionItem("Podpięte konta email", Manifest.permission.GET_ACCOUNTS, defaultStatus, "", EasyId(context))
+                PermissionItem("Kontakty", Manifest.permission.READ_CONTACTS, defaultStatus, "", EasyId(context), true),
+                PermissionItem("Wiadomości", Manifest.permission.READ_SMS, defaultStatus, "", EasyId(context), true),
+                PermissionItem("Pamięć urządzenia", Manifest.permission.READ_EXTERNAL_STORAGE, defaultStatus, "", EasyId(context), true),
+                PermissionItem("Podpięte konta email", Manifest.permission.GET_ACCOUNTS, defaultStatus, "", EasyId(context), true),
+                PermissionItem("", Manifest.permission.BATTERY_STATS, defaultStatus, "", EasyBattery(context), false)
+
 //                PermissionItem("Aparat", defaultStatus),
 //                PermissionItem("Dyktafon", defaultStatus),
 //                PermissionItem("Galeria", defaultStatus),
