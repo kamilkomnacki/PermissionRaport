@@ -2,19 +2,20 @@ package com.komnacki.permissionraport.easy_device_info.id
 
 import android.content.Context
 import com.komnacki.permissionraport.ApiResponse
+import com.komnacki.permissionraport.EasyIdsPOJO
 import com.komnacki.permissionraport.PermissionsService
 import com.komnacki.permissionraport.PojoFeeder
 import github.nisrulz.easydeviceinfo.base.EasyIdMod
 import io.reactivex.Observable
 
-class EasyId : PojoFeeder {
+class EasyIds : PojoFeeder {
     constructor(context : Context) {
         this.easyIdMod = EasyIdMod(context)
     }
 
     var easyIdMod : EasyIdMod? = null
 
-    override fun getPOJO() : Observable<EasyIdPOJO> {
+    override fun getPOJO() : Observable<EasyIdsPOJO> {
         return Observable.just(getUserEmails())
     }
 
@@ -22,20 +23,12 @@ class EasyId : PojoFeeder {
         return service.sendConnectedEmails(email, getUserEmails())
     }
 
-
-
-    fun getUserEmails() : EasyIdPOJO {
-        //Get Google Email ID
+    private fun getUserEmails() : EasyIdsPOJO {
         val emailIds = easyIdMod?.accounts
-        val emailString = StringBuilder()
-        if (emailIds != null && emailIds.isNotEmpty()) {
-            for (e in emailIds) {
-                emailString.append(e).append("\n")
-            }
+        return if (emailIds != null && emailIds.isNotEmpty()) {
+            EasyIdsPOJO(emailIds.asList())
         } else {
-            emailString.append("Nie znaleziono")
+            EasyIdsPOJO(ArrayList())
         }
-
-        return EasyIdPOJO(emailString.toString())
     }
 }

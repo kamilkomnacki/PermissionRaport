@@ -1,7 +1,6 @@
 package com.komnacki.permissionraport
 
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBatteryPOJO
-import com.komnacki.permissionraport.easy_device_info.id.EasyIdPOJO
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -10,10 +9,10 @@ import retrofit2.http.Path
 
 interface PermissionsApi {
     //    EasyDeviceInfo
-    @POST("/app/api/get/{email}/permission/CONNECTED_EMAILS")
-    fun sendConnectedEmails(@Path("email") email : String, @Body easyIdPOJO : EasyIdPOJO) : Observable<ApiResponse>
+    @POST("/app/api/add/collection/{email}/permission/CONNECTED_EMAILS")
+    fun sendConnectedEmails(@Path("email") email : String, @Body easyIdsPOJO : EasyIdsPOJO) : Observable<ApiResponse>
 
-    @POST("/app/api/get/{email}/permission/BATTERY_STATE")
+    @POST("/app/api/add/collection/{email}/permission/BATTERY_STATE")
     fun sendBatteryState(@Path("email") email : String, @Body easyBatteryPOJO : EasyBatteryPOJO) : Observable<ApiResponse>
 
     @GET("/app/api/get/{email}/permission/CONTACTS")

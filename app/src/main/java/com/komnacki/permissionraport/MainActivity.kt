@@ -14,6 +14,7 @@ import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlin.math.roundToInt
 
 
 class MainActivity : AppCompatActivity() {
@@ -113,14 +114,23 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "per: $it")
             pojos.add(it.sendPOJO(service, sendPanel.getEmail()))
         }
+
+        val allRequestsCount = pojos.size
+        var correctRequestsCount = 0
+        progressDialog.setProgress(0)
+
         var disposable = Observable.concat(pojos)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
+            .doOnTerminate { progressDialog.hide() }
             .subscribe(
-                { result -> Log.d(TAG, result.response) },
+                { result ->
+                    Log.d(TAG, result.response)
+                    val progress : Int = ((correctRequestsCount ++ / allRequestsCount.toFloat()) * 100).roundToInt()
+                    progressDialog.setProgress(progress)
+                },
                 { error ->
                     Log.d(TAG, error.message)
-                    progressDialog.hide()
                     showSendErrorAlert(error.message)
                 }
             )

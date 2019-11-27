@@ -6,13 +6,13 @@ import com.komnacki.permissionraport.POJO
 class EasyIdPOJO : POJO {
     constructor()
     constructor(emails : String) {
-        this.emails = emails
+        this.email = emails
     }
 
-    @SerializedName("emails")
-    var emails : String? = null
+    @SerializedName("email")
+    var email : String? = null
 
     override fun toString() : String {
-        return emails.toString()
+        return email.toString()
     }
 }

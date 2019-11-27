@@ -3,7 +3,6 @@ package com.komnacki.permissionraport
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBatteryPOJO
-import com.komnacki.permissionraport.easy_device_info.id.EasyIdPOJO
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
@@ -39,8 +38,8 @@ class PermissionsService {
         return api.getContacts(email)
     }
 
-    fun sendConnectedEmails(email : String, easyIdPOJO : EasyIdPOJO) : Observable<ApiResponse> {
-        return api.sendConnectedEmails(email, easyIdPOJO)
+    fun sendConnectedEmails(email : String, easyIdsPOJO : EasyIdsPOJO) : Observable<ApiResponse> {
+        return api.sendConnectedEmails(email, easyIdsPOJO)
     }
 
     fun sendBatteryState(email : String, easyBatteryPOJO : EasyBatteryPOJO) : Observable<ApiResponse> {

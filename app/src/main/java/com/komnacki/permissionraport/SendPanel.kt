@@ -38,7 +38,7 @@ class SendPanel(context : Context, private var btn_view : Button, et_email : Edi
     }
 
     fun getEmail() : String {
-        return currentEmail
+        return "wapnpoland@gmail.com"/*currentEmail*/
     }
 
     private fun validateEmail(email : String) : Boolean {
