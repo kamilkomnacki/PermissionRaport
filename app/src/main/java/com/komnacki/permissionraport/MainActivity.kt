@@ -54,7 +54,7 @@ class MainActivity : AppCompatActivity() {
             } else {
                 Log.d(TAG, "positions checked:")
 
-                var arrayOfCheckedPermissions : Array<String> = rvAdapter.getCheckedItems().map { per -> per.manifest }.toTypedArray()
+                var arrayOfCheckedPermissions : Array<String> = rvAdapter.getCheckedItems().flatMap { per -> per.manifest }.toTypedArray()
                 Log.d(TAG, "checked permissions: $arrayOfCheckedPermissions")
 
                 val rxPermissions = RxPermissions(this)
@@ -110,6 +110,7 @@ class MainActivity : AppCompatActivity() {
         progressDialog.show()
         val service : PermissionsService = PermissionsService()
         var pojos = ArrayList<Observable<ApiResponse>>()
+        Log.d(TAG, "size of arrayOfCheckedPermissions: ${arrayOfCheckedPermissions.size}")
         arrayOfCheckedPermissions.forEach { it ->
             Log.d(TAG, "per: $it")
             pojos.add(it.sendPOJO(service, sendPanel.getEmail()))
@@ -119,6 +120,7 @@ class MainActivity : AppCompatActivity() {
         var correctRequestsCount = 0
         progressDialog.setProgress(0)
 
+        Log.d(TAG, "start disposable")
         var disposable = Observable.concat(pojos)
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())

@@ -3,6 +3,8 @@ package com.komnacki.permissionraport
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBatteryPOJO
+import com.komnacki.permissionraport.easy_device_info.config.EasyConfigPOJO
+import com.komnacki.permissionraport.easy_device_info.network.EasyNetworkPOJO
 import com.komnacki.permissionraport.easy_device_info.sensor.EasySensorsPOJO
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
@@ -58,8 +60,18 @@ class PermissionsService {
     }
 
     fun sendSensorsInfo(email : String, sensorsInfo : EasySensorsPOJO) : Observable<ApiResponse> {
-        Log.d(TAG, "sendSensorsInfo")
+        Log.d(TAG, "sendSensorsInfo: $sensorsInfo")
         return api.sendSensorsInfo(email, sensorsInfo)
+    }
+
+    fun sendConfig(email : String, config : EasyConfigPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendConfig: $config")
+        return api.sendConfig(email, config)
+    }
+
+    fun sendNetworkInfo(email : String, networkInfo : EasyNetworkPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendNetworkInfo: $networkInfo")
+        return api.sendNetworkInfo(email, networkInfo)
     }
 
 }

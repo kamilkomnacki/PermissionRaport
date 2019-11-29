@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Context
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBattery
 import com.komnacki.permissionraport.easy_device_info.id.EasyIds
+import com.komnacki.permissionraport.easy_device_info.network.EasyNetwork
 
 
 class PermissionsList(val activity : Activity, val context : Context) {
@@ -15,11 +16,19 @@ class PermissionsList(val activity : Activity, val context : Context) {
     init {
         PERMISSIONS_LIST = ArrayList(
             listOf(
-                PermissionItem("Kontakty", Manifest.permission.READ_CONTACTS, defaultStatus, "", EasyIds(context), true),
-                PermissionItem("Wiadomości", Manifest.permission.READ_SMS, defaultStatus, "", EasyIds(context), true),
-                PermissionItem("Pamięć urządzenia", Manifest.permission.READ_EXTERNAL_STORAGE, defaultStatus, "", EasyIds(context), true),
-                PermissionItem("Podpięte konta email", Manifest.permission.GET_ACCOUNTS, defaultStatus, "", EasyIds(context), true),
-                PermissionItem("", Manifest.permission.BATTERY_STATS, defaultStatus, "", EasyBattery(context), false)
+                PermissionItem("Kontakty", listOf(Manifest.permission.READ_CONTACTS), defaultStatus, "", EasyIds(context), true),
+                PermissionItem("Wiadomości", listOf(Manifest.permission.READ_SMS), defaultStatus, "", EasyIds(context), true),
+                PermissionItem("Pamięć urządzenia", listOf(Manifest.permission.READ_EXTERNAL_STORAGE), defaultStatus, "", EasyIds(context), true),
+                PermissionItem("Podpięte konta email", listOf(Manifest.permission.GET_ACCOUNTS), defaultStatus, "", EasyIds(context), true),
+                PermissionItem("", listOf(Manifest.permission.BATTERY_STATS), defaultStatus, "", EasyBattery(context), false),
+                PermissionItem(
+                    "Sieć",
+                    listOf(Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET),
+                    defaultStatus,
+                    "",
+                    EasyNetwork(context),
+                    true
+                )
 
 //                PermissionItem("Aparat", defaultStatus),
 //                PermissionItem("Dyktafon", defaultStatus),

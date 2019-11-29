@@ -15,8 +15,8 @@ class EasyIds : PojoFeeder {
 
     var easyIdMod : EasyIdMod? = null
 
-    override fun getPOJO() : Observable<EasyIdsPOJO> {
-        return Observable.just(getUserEmails())
+    override fun getPOJO() : EasyIdsPOJO {
+        return getUserEmails()
     }
 
     override fun sendPOJO(service : PermissionsService, email : String) : Observable<ApiResponse> {

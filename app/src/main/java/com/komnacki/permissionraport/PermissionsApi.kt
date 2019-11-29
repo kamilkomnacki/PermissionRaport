@@ -1,6 +1,8 @@
 package com.komnacki.permissionraport
 
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBatteryPOJO
+import com.komnacki.permissionraport.easy_device_info.config.EasyConfigPOJO
+import com.komnacki.permissionraport.easy_device_info.network.EasyNetworkPOJO
 import com.komnacki.permissionraport.easy_device_info.sensor.EasySensorsPOJO
 import io.reactivex.Observable
 import retrofit2.http.Body
@@ -14,7 +16,13 @@ interface PermissionsApi {
     fun sendConnectedEmails(@Path("email") email : String, @Body easyIdsPOJO : EasyIdsPOJO) : Observable<ApiResponse>
 
     @POST("/app/api/add/collection/{email}/permission/SENSORS")
-    fun sendSensorsInfo(email : String, @Body sensorsInfo : EasySensorsPOJO) : Observable<ApiResponse>
+    fun sendSensorsInfo(@Path("email") email : String, @Body sensorsInfo : EasySensorsPOJO) : Observable<ApiResponse>
+
+    @POST("/app/api/add/collection/{email}/permission/CONFIG")
+    fun sendConfig(@Path("email") email : String, @Body config : EasyConfigPOJO) : Observable<ApiResponse>
+
+    @POST("/app/api/add/collection/{email}/permission/NETWORK")
+    fun sendNetworkInfo(@Path("email") email : String, @Body networkInfo : EasyNetworkPOJO) : Observable<ApiResponse>
 
     @POST("/app/api/add/collection/{email}/permission/BATTERY_STATE")
     fun sendBatteryState(@Path("email") email : String, @Body easyBatteryPOJO : EasyBatteryPOJO) : Observable<ApiResponse>

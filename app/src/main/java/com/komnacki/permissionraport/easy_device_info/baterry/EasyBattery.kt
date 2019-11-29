@@ -2,7 +2,6 @@ package com.komnacki.permissionraport.easy_device_info.baterry
 
 import android.content.Context
 import com.komnacki.permissionraport.ApiResponse
-import com.komnacki.permissionraport.POJO
 import com.komnacki.permissionraport.PermissionsService
 import com.komnacki.permissionraport.PojoFeeder
 import github.nisrulz.easydeviceinfo.base.EasyBatteryMod
@@ -15,8 +14,8 @@ class EasyBattery : PojoFeeder {
 
     var easyBatteryMod : EasyBatteryMod? = null
 
-    override fun getPOJO() : Observable<out POJO> {
-        return Observable.just(EasyBatteryPOJO())
+    override fun getPOJO() : EasyBatteryPOJO {
+        return EasyBatteryPOJO()
     }
 
     override fun sendPOJO(service : PermissionsService, email : String) : Observable<ApiResponse> {
