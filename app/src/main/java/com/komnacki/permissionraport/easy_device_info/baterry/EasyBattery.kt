@@ -23,12 +23,13 @@ class EasyBattery : PojoFeeder {
     }
 
     private fun getBatteryState() : EasyBatteryPOJO {
-        var value = easyBatteryMod?.batteryPercentage
-        if (value != null) {
-            return EasyBatteryPOJO(value)
-        } else {
-            return EasyBatteryPOJO(- 1)
-        }
+        val value = easyBatteryMod !!.batteryPercentage
+        val isCharge = easyBatteryMod !!.isDeviceCharging
+        val technology = easyBatteryMod !!.batteryTechnology
+        val temperature = easyBatteryMod !!.batteryTemperature
+        val voltage = easyBatteryMod !!.batteryVoltage
+        val hasBattery = easyBatteryMod !!.isBatteryPresent
+        return EasyBatteryPOJO(value, isCharge, technology, temperature, voltage, hasBattery)
     }
 
 }
