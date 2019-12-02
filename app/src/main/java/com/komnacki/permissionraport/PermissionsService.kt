@@ -3,7 +3,10 @@ package com.komnacki.permissionraport
 import android.util.Log
 import com.google.gson.GsonBuilder
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBatteryPOJO
+import com.komnacki.permissionraport.easy_device_info.bluetooth.EasyBluetoothPOJO
 import com.komnacki.permissionraport.easy_device_info.config.EasyConfigPOJO
+import com.komnacki.permissionraport.easy_device_info.device.EasyDevicePOJO
+import com.komnacki.permissionraport.easy_device_info.memory.EasyMemoryPOJO
 import com.komnacki.permissionraport.easy_device_info.network.EasyNetworkPOJO
 import com.komnacki.permissionraport.easy_device_info.sensor.EasySensorsPOJO
 import io.reactivex.Observable
@@ -42,10 +45,12 @@ class PermissionsService {
     }
 
     fun sendConnectedEmails(email : String, easyIdsPOJO : EasyIdsPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendConnectedEmails: $easyIdsPOJO")
         return api.sendConnectedEmails(email, easyIdsPOJO)
     }
 
     fun sendBatteryState(email : String, easyBatteryPOJO : EasyBatteryPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendBatteryState: $easyBatteryPOJO")
         return api.sendBatteryState(email, easyBatteryPOJO)
     }
 
@@ -72,6 +77,21 @@ class PermissionsService {
     fun sendNetworkInfo(email : String, networkInfo : EasyNetworkPOJO) : Observable<ApiResponse> {
         Log.d(TAG, "sendNetworkInfo: $networkInfo")
         return api.sendNetworkInfo(email, networkInfo)
+    }
+
+    fun sendMemoryInfo(email : String, memoryInfo : EasyMemoryPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendMemoryInfo: $memoryInfo")
+        return api.sendMemoryInfo(email, memoryInfo)
+    }
+
+    fun sendBluetoothInfo(email : String, bluetoothPOJO : EasyBluetoothPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendBluetoothInfo:  $bluetoothPOJO")
+        return api.sendBluetoothInfo(email, bluetoothPOJO)
+    }
+
+    fun sendDeviceInfo(email : String, devicePOJO : EasyDevicePOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendDeviceInfo: $devicePOJO")
+        return api.sendDeviceInfo(email, devicePOJO)
     }
 
 }

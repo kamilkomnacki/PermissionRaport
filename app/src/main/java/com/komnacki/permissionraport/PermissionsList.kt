@@ -4,7 +4,10 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBattery
+import com.komnacki.permissionraport.easy_device_info.bluetooth.EasyBluetooth
+import com.komnacki.permissionraport.easy_device_info.device.EasyDevice
 import com.komnacki.permissionraport.easy_device_info.id.EasyIds
+import com.komnacki.permissionraport.easy_device_info.memory.EasyMemory
 import com.komnacki.permissionraport.easy_device_info.network.EasyNetwork
 
 
@@ -28,7 +31,10 @@ class PermissionsList(val activity : Activity, val context : Context) {
                     "",
                     EasyNetwork(context),
                     true
-                )
+                ),
+                PermissionItem("", listOf(), defaultStatus, "", EasyMemory(context), false),
+                PermissionItem("Bluetooth", listOf(Manifest.permission.BLUETOOTH), defaultStatus, "", EasyBluetooth(context), true),
+                PermissionItem("", listOf(), defaultStatus, "", EasyDevice(activity, context), false)
 
 //                PermissionItem("Aparat", defaultStatus),
 //                PermissionItem("Dyktafon", defaultStatus),
