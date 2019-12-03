@@ -7,8 +7,11 @@ import com.komnacki.permissionraport.easy_device_info.baterry.EasyBattery
 import com.komnacki.permissionraport.easy_device_info.bluetooth.EasyBluetooth
 import com.komnacki.permissionraport.easy_device_info.device.EasyDevice
 import com.komnacki.permissionraport.easy_device_info.id.EasyIds
+import com.komnacki.permissionraport.easy_device_info.location.EasyLocation
 import com.komnacki.permissionraport.easy_device_info.memory.EasyMemory
 import com.komnacki.permissionraport.easy_device_info.network.EasyNetwork
+import com.komnacki.permissionraport.easy_device_info.nfc.EasyNFC
+import com.komnacki.permissionraport.easy_device_info.sim.EasySim
 
 
 class PermissionsList(val activity : Activity, val context : Context) {
@@ -34,7 +37,17 @@ class PermissionsList(val activity : Activity, val context : Context) {
                 ),
                 PermissionItem("", listOf(), defaultStatus, "", EasyMemory(context), false),
                 PermissionItem("Bluetooth", listOf(Manifest.permission.BLUETOOTH), defaultStatus, "", EasyBluetooth(context), true),
-                PermissionItem("", listOf(), defaultStatus, "", EasyDevice(activity, context), false)
+                PermissionItem("", listOf(), defaultStatus, "", EasyDevice(activity, context), false),
+                PermissionItem("", listOf(), defaultStatus, "", EasySim(context), false),
+                PermissionItem(
+                    "Lokalizacja",
+                    listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+                    defaultStatus,
+                    "",
+                    EasyLocation(context),
+                    true
+                ),
+                PermissionItem("", listOf(), defaultStatus, "", EasyNFC(context), false)
 
 //                PermissionItem("Aparat", defaultStatus),
 //                PermissionItem("Dyktafon", defaultStatus),

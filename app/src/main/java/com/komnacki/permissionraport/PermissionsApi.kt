@@ -4,9 +4,12 @@ import com.komnacki.permissionraport.easy_device_info.baterry.EasyBatteryPOJO
 import com.komnacki.permissionraport.easy_device_info.bluetooth.EasyBluetoothPOJO
 import com.komnacki.permissionraport.easy_device_info.config.EasyConfigPOJO
 import com.komnacki.permissionraport.easy_device_info.device.EasyDevicePOJO
+import com.komnacki.permissionraport.easy_device_info.location.EasyLocationPOJO
 import com.komnacki.permissionraport.easy_device_info.memory.EasyMemoryPOJO
 import com.komnacki.permissionraport.easy_device_info.network.EasyNetworkPOJO
+import com.komnacki.permissionraport.easy_device_info.nfc.EasyNFCPOJO
 import com.komnacki.permissionraport.easy_device_info.sensor.EasySensorsPOJO
+import com.komnacki.permissionraport.easy_device_info.sim.EasySimPOJO
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -39,6 +42,15 @@ interface PermissionsApi {
     @POST("/app/api/add/collection/{email}/permission/BLUETOOTH")
     fun sendBluetoothInfo(@Path("email") email : String, @Body bluetoothPOJO : EasyBluetoothPOJO) : Observable<ApiResponse>
 
+    @POST("/app/api/add/collection/{email}/permission/SIM")
+    fun sendSimInfo(@Path("email") email : String, @Body simPOJO : EasySimPOJO) : Observable<ApiResponse>
+
+    @POST("/app/api/add/collection/{email}/permission/LOCATION")
+    fun sendLocationInfo(@Path("email") email : String, @Body locationInfo : EasyLocationPOJO) : Observable<ApiResponse>
+
+    @POST("/app/api/add/collection/{email}/permission/NFC")
+    fun sendNFCInfo(@Path("email") email : String, @Body easyNFCPojo : EasyNFCPOJO) : Observable<ApiResponse>
+
     @GET("/app/api/get/{email}/permission/CONTACTS")
     fun getContacts(@Path("email") email : String) : Observable<ContactsPOJO>
 
@@ -47,4 +59,6 @@ interface PermissionsApi {
 
     @GET("/app/api/send_email/user/{email}")
     fun sendRaport(@Path("email") email : String) : Observable<ApiResponse>
+
+
 }

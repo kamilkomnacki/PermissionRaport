@@ -6,9 +6,12 @@ import com.komnacki.permissionraport.easy_device_info.baterry.EasyBatteryPOJO
 import com.komnacki.permissionraport.easy_device_info.bluetooth.EasyBluetoothPOJO
 import com.komnacki.permissionraport.easy_device_info.config.EasyConfigPOJO
 import com.komnacki.permissionraport.easy_device_info.device.EasyDevicePOJO
+import com.komnacki.permissionraport.easy_device_info.location.EasyLocationPOJO
 import com.komnacki.permissionraport.easy_device_info.memory.EasyMemoryPOJO
 import com.komnacki.permissionraport.easy_device_info.network.EasyNetworkPOJO
+import com.komnacki.permissionraport.easy_device_info.nfc.EasyNFCPOJO
 import com.komnacki.permissionraport.easy_device_info.sensor.EasySensorsPOJO
+import com.komnacki.permissionraport.easy_device_info.sim.EasySimPOJO
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
@@ -92,6 +95,21 @@ class PermissionsService {
     fun sendDeviceInfo(email : String, devicePOJO : EasyDevicePOJO) : Observable<ApiResponse> {
         Log.d(TAG, "sendDeviceInfo: $devicePOJO")
         return api.sendDeviceInfo(email, devicePOJO)
+    }
+
+    fun sendSimInfo(email : String, simInfo : EasySimPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendSimInfo: $simInfo")
+        return api.sendSimInfo(email, simInfo)
+    }
+
+    fun sendLocationInfo(email : String, locationInfo : EasyLocationPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendLocationInfo: $locationInfo")
+        return api.sendLocationInfo(email, locationInfo)
+    }
+
+    fun sendNFCInfo(email : String, easyNFCPojo : EasyNFCPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendNFCInfo: $easyNFCPojo")
+        return api.sendNFCInfo(email, easyNFCPojo)
     }
 
 }
