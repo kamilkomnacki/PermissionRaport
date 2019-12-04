@@ -9,7 +9,7 @@ class EasyConfigPOJO : POJO {
         this.ringerMode = ringerMode
     }
 
-    @SerializedName("email")
+    @SerializedName("ringerMode")
     var ringerMode : String? = null
 
     override fun toString() : String {
