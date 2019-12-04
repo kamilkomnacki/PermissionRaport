@@ -27,6 +27,7 @@ class PermissionsList(val activity : Activity, val context : Context) {
                 PermissionItem("Pamięć urządzenia", listOf(Manifest.permission.READ_EXTERNAL_STORAGE), defaultStatus, "", EasyIds(context), true),
                 PermissionItem("Podpięte konta email", listOf(Manifest.permission.GET_ACCOUNTS), defaultStatus, "", EasyIds(context), true),
                 PermissionItem("", listOf(Manifest.permission.BATTERY_STATS), defaultStatus, "", EasyBattery(context), false),
+                PermissionItem("", listOf(), defaultStatus, "", EasyDevice(activity, context), false),
                 PermissionItem(
                     "Sieć",
                     listOf(Manifest.permission.ACCESS_NETWORK_STATE, Manifest.permission.ACCESS_WIFI_STATE, Manifest.permission.INTERNET),
@@ -37,7 +38,6 @@ class PermissionsList(val activity : Activity, val context : Context) {
                 ),
                 PermissionItem("", listOf(), defaultStatus, "", EasyMemory(context), false),
                 PermissionItem("Bluetooth", listOf(Manifest.permission.BLUETOOTH), defaultStatus, "", EasyBluetooth(context), true),
-                PermissionItem("", listOf(), defaultStatus, "", EasyDevice(activity, context), false),
                 PermissionItem("", listOf(), defaultStatus, "", EasySim(context), false),
                 PermissionItem(
                     "Lokalizacja",
