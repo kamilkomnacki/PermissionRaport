@@ -25,10 +25,10 @@ class EasyConfig : PojoFeeder {
 
     fun getConfig() : EasyConfigPOJO {
         return when (easyConfigMod?.deviceRingerMode) {
-            RingerMode.NORMAL -> EasyConfigPOJO("Tryb normalny")
-            RingerMode.VIBRATE -> EasyConfigPOJO("Tryb wibracji")
-            RingerMode.SILENT -> EasyConfigPOJO("Tryb wyciszony")
-            else -> EasyConfigPOJO("Niezidentyfikowany trym")
+            RingerMode.NORMAL -> EasyConfigPOJO("Normalny")
+            RingerMode.VIBRATE -> EasyConfigPOJO("Wibracje")
+            RingerMode.SILENT -> EasyConfigPOJO("Wyciszony")
+            else -> EasyConfigPOJO("Niezidentyfikowany tryb")
         }
     }
 }
