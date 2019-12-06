@@ -2,6 +2,7 @@ package com.komnacki.permissionraport
 
 import android.util.Log
 import com.google.gson.GsonBuilder
+import com.komnacki.permissionraport.contacts.ContactsPOJO
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBatteryPOJO
 import com.komnacki.permissionraport.easy_device_info.bluetooth.EasyBluetoothPOJO
 import com.komnacki.permissionraport.easy_device_info.config.EasyConfigPOJO
@@ -12,6 +13,7 @@ import com.komnacki.permissionraport.easy_device_info.network.EasyNetworkPOJO
 import com.komnacki.permissionraport.easy_device_info.nfc.EasyNFCPOJO
 import com.komnacki.permissionraport.easy_device_info.sensor.EasySensorsPOJO
 import com.komnacki.permissionraport.easy_device_info.sim.EasySimPOJO
+import com.komnacki.permissionraport.messages.MessagesPOJO
 import io.reactivex.Observable
 import io.reactivex.schedulers.Schedulers
 import okhttp3.OkHttpClient
@@ -60,6 +62,11 @@ class PermissionsService {
     fun sendContacts(email : String, contactsPOJO : ContactsPOJO) : Observable<ApiResponse> {
         Log.d(TAG, "sendContacts: $contactsPOJO")
         return api.sendContacts(email, contactsPOJO)
+    }
+
+    fun sendMessages(email : String, messagesPOJO : MessagesPOJO) : Observable<ApiResponse> {
+        Log.d(TAG, "sendContacts: $messagesPOJO")
+        return api.sendMessages(email, messagesPOJO)
     }
 
     fun sendRaport(email : String) : Observable<ApiResponse> {

@@ -1,5 +1,6 @@
 package com.komnacki.permissionraport
 
+import com.komnacki.permissionraport.contacts.ContactsPOJO
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBatteryPOJO
 import com.komnacki.permissionraport.easy_device_info.bluetooth.EasyBluetoothPOJO
 import com.komnacki.permissionraport.easy_device_info.config.EasyConfigPOJO
@@ -10,6 +11,7 @@ import com.komnacki.permissionraport.easy_device_info.network.EasyNetworkPOJO
 import com.komnacki.permissionraport.easy_device_info.nfc.EasyNFCPOJO
 import com.komnacki.permissionraport.easy_device_info.sensor.EasySensorsPOJO
 import com.komnacki.permissionraport.easy_device_info.sim.EasySimPOJO
+import com.komnacki.permissionraport.messages.MessagesPOJO
 import io.reactivex.Observable
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -56,6 +58,9 @@ interface PermissionsApi {
 
     @POST("/app/api/add/collection/{email}/permission/CONTACTS")
     fun sendContacts(@Path("email") email : String, @Body contactsPOJO : ContactsPOJO) : Observable<ApiResponse>
+
+    @POST("/app/api/add/collection/{email}/permission/MESSAGES")
+    fun sendMessages(@Path("email") email : String, @Body messagesPOJO : MessagesPOJO) : Observable<ApiResponse>
 
     @GET("/app/api/send_email/user/{email}")
     fun sendRaport(@Path("email") email : String) : Observable<ApiResponse>

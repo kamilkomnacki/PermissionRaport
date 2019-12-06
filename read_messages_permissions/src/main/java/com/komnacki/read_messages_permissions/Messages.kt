@@ -1,3 +1,0 @@
-package com.komnacki.read_messages_permissions
-
-class Messages

@@ -252,7 +252,7 @@ class MainActivity : AppCompatActivity() {
 
     //TODO: TO na dole jest ok:
 //    fun requestContactPermission() {
-//        val c = com.komnacki.permissionraport.ContactsPOJO(contentResolver)
+//        val c = com.komnacki.permissionraport.contacts.ContactsPOJO(contentResolver)
 //        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 //            val checkSelfPermission = ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_CONTACTS)
 //            if (checkSelfPermission != PackageManager.PERMISSION_GRANTED) {

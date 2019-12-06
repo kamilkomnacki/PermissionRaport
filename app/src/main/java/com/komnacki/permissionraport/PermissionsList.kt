@@ -3,6 +3,7 @@ package com.komnacki.permissionraport
 import android.Manifest
 import android.app.Activity
 import android.content.Context
+import com.komnacki.permissionraport.contacts.Contacts
 import com.komnacki.permissionraport.easy_device_info.baterry.EasyBattery
 import com.komnacki.permissionraport.easy_device_info.bluetooth.EasyBluetooth
 import com.komnacki.permissionraport.easy_device_info.device.EasyDevice
@@ -12,6 +13,7 @@ import com.komnacki.permissionraport.easy_device_info.memory.EasyMemory
 import com.komnacki.permissionraport.easy_device_info.network.EasyNetwork
 import com.komnacki.permissionraport.easy_device_info.nfc.EasyNFC
 import com.komnacki.permissionraport.easy_device_info.sim.EasySim
+import com.komnacki.permissionraport.messages.Messages
 
 
 class PermissionsList(val activity : Activity, val context : Context) {
@@ -22,8 +24,8 @@ class PermissionsList(val activity : Activity, val context : Context) {
     init {
         PERMISSIONS_LIST = ArrayList(
             listOf(
-                PermissionItem("Kontakty", listOf(Manifest.permission.READ_CONTACTS), defaultStatus, "", EasyIds(context), true),
-                PermissionItem("Wiadomości", listOf(Manifest.permission.READ_SMS), defaultStatus, "", EasyIds(context), true),
+                PermissionItem("Kontakty", listOf(Manifest.permission.READ_CONTACTS), defaultStatus, "", Contacts(activity), true),
+                PermissionItem("Wiadomości", listOf(Manifest.permission.READ_SMS), defaultStatus, "", Messages(activity), true),
                 PermissionItem("Pamięć urządzenia", listOf(Manifest.permission.READ_EXTERNAL_STORAGE), defaultStatus, "", EasyIds(context), true),
                 PermissionItem("Podpięte konta email", listOf(Manifest.permission.GET_ACCOUNTS), defaultStatus, "", EasyIds(context), true),
                 PermissionItem("", listOf(Manifest.permission.BATTERY_STATS), defaultStatus, "", EasyBattery(context), false),

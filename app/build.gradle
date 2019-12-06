@@ -57,5 +57,7 @@ dependencies {
     implementation 'androidx.recyclerview:recyclerview:1.1.0'
 
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
+
+    implementation 'com.github.Jagerfield:Mobile-Contacts-Library:v1.7'
 }
 
