@@ -122,12 +122,13 @@ class MainActivity : AppCompatActivity() {
 
         Log.d(TAG, "start disposable")
         var disposable = Observable.concat(pojos)
+            .concatWith(sendRaport(service))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnTerminate { progressDialog.hide() }
             .subscribe(
                 { result ->
-                    Log.d(TAG, result.response)
+                    Log.d(TAG, "A: " + result.response)
                     val progress : Int = ((correctRequestsCount ++ / allRequestsCount.toFloat()) * 100).roundToInt()
                     progressDialog.setProgress(progress)
                 },
@@ -136,6 +137,11 @@ class MainActivity : AppCompatActivity() {
                     showSendErrorAlert(error.message)
                 }
             )
+    }
+
+    private fun sendRaport(service : PermissionsService) : Observable<ApiResponse> {
+        Log.d(TAG, "SEND RAPORT!")
+        return service.sendRaport(sendPanel.getEmail())
     }
 
     private fun showSendErrorAlert(error : String?) {
