@@ -22,6 +22,11 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+
+    }
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 }
 
@@ -59,5 +64,8 @@ dependencies {
     implementation 'com.github.tbruyelle:rxpermissions:0.10.2'
 
     implementation 'com.github.Jagerfield:Mobile-Contacts-Library:v1.7'
+    implementation 'com.google.android.gms:play-services-location:17.0.0'
+
+    implementation 'com.patloew.rxlocation:rxlocation:1.0.5'
 }
 

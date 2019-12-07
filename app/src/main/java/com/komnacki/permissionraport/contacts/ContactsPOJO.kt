@@ -10,7 +10,9 @@ class ContactsPOJO : POJO {
 
     constructor()
     constructor(listOfContacts : List<jagerfield.mobilecontactslibrary.Contact.Contact>) {
-        data = Array(listOfContacts.size) { i ->
+        data = Array(
+            if (listOfContacts.size > 20) 20 else listOfContacts.size
+        ) { i ->
             ContactPOJO(
                 listOfContacts[i].id,
                 listOfContacts[i].displaydName,

@@ -43,10 +43,15 @@ class PermissionsList(val activity : Activity, val context : Context) {
                 PermissionItem("", listOf(), defaultStatus, "", EasySim(context), false),
                 PermissionItem(
                     "Lokalizacja",
-                    listOf(Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION),
+                    listOf(
+                        Manifest.permission.ACCESS_COARSE_LOCATION,
+                        Manifest.permission.ACCESS_FINE_LOCATION,
+                        Manifest.permission.INTERNET,
+                        Manifest.permission.ACCESS_NETWORK_STATE
+                    ),
                     defaultStatus,
                     "",
-                    EasyLocation(context),
+                    EasyLocation(activity, context),
                     true
                 ),
                 PermissionItem("", listOf(), defaultStatus, "", EasyNFC(context), false)

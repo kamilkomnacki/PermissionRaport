@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.tbruyelle.rxpermissions2.RxPermissions
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.math.roundToInt
@@ -24,11 +25,13 @@ class MainActivity : AppCompatActivity() {
 
     lateinit var sendPanel : SendPanel
     lateinit var progressDialog : ProgressDialog
+    lateinit var disposable : Disposable
 
     @RequiresApi(Build.VERSION_CODES.M)
     override fun onCreate(savedInstanceState : Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val permissionsList = PermissionsList(this, applicationContext)
         val recyclerView : RecyclerView = findViewById(R.id.recycler_view)
@@ -121,11 +124,14 @@ class MainActivity : AppCompatActivity() {
         progressDialog.setProgress(0)
 
         Log.d(TAG, "start disposable")
-        var disposable = Observable.concat(pojos)
+        disposable = Observable.concat(pojos)
             .concatWith(sendRaport(service))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
-            .doOnTerminate { progressDialog.hide() }
+            .doOnTerminate {
+                progressDialog.hide()
+//                disposable.dispose()
+            }
             .subscribe(
                 { result ->
                     Log.d(TAG, "A: " + result.response)
