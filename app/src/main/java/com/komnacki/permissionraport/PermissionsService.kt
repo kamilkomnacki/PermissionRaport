@@ -65,7 +65,7 @@ class PermissionsService {
     }
 
     fun sendMessages(email : String, messagesPOJO : MessagesPOJO) : Observable<ApiResponse> {
-        Log.d(TAG, "sendContacts: $messagesPOJO")
+        Log.d(TAG, "sendMessages: $messagesPOJO")
         return api.sendMessages(email, messagesPOJO)
     }
 

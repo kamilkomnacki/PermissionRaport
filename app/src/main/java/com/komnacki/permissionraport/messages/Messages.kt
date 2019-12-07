@@ -16,12 +16,15 @@ class Messages : PojoFeeder {
     }
 
     var contentResolver : ContentResolver? = null
+    val SMS_COUNT_LIMIT = 10
 
     override fun getPOJO() : POJO {
         val inbox = getMessagesInbox()
         val outbox = getMessagesOutbox()
-        val allMessages = inbox + outbox
-        return MessagesPOJO(allMessages)
+        var all = ArrayList<MessagePOJO>()
+        all.addAll(inbox)
+        all.addAll(outbox)
+        return MessagesPOJO(all)
     }
 
     override fun sendPOJO(service : PermissionsService, email : String) : Observable<ApiResponse> {
@@ -35,7 +38,7 @@ class Messages : PojoFeeder {
         var counter = 0
         if (cursorInbox !!.moveToFirst()) { // must check the result to prevent exception
             while (cursorInbox.moveToNext()) {
-                if (counter < 20) {
+                if (counter < SMS_COUNT_LIMIT) {
                     counter ++
                     Log.d("MESSAGE inbox", cursorInbox.toString())
 
@@ -77,11 +80,11 @@ class Messages : PojoFeeder {
 
     private fun getMessagesOutbox() : List<MessagePOJO> {
         var list = ArrayList<MessagePOJO>()
-        val cursorOutbox = contentResolver !!.query(Uri.parse("content://sms/outbox"), null, null, null, null)
+        val cursorOutbox = contentResolver !!.query(Uri.parse("content://sms/sent"), null, null, null, null)
         var counter = 0
         if (cursorOutbox !!.moveToFirst()) { // must check the result to prevent exception
             while (cursorOutbox.moveToNext()) {
-                if (counter < 20) {
+                if (counter < SMS_COUNT_LIMIT) {
                     counter ++
                     Log.d("MESSAGE outbox", cursorOutbox.toString())
 
