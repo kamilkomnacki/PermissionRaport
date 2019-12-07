@@ -116,25 +116,24 @@ class MainActivity : AppCompatActivity() {
         Log.d(TAG, "size of arrayOfCheckedPermissions: ${arrayOfCheckedPermissions.size}")
         arrayOfCheckedPermissions.forEach { it ->
             Log.d(TAG, "per: $it")
-            pojos.add(it.sendPOJO(service, sendPanel.getEmail()))
+//            var hash = System.currentTimeMillis()
+            pojos.add(it.sendPOJO(service, sendPanel.getEmail()/* + "##" + hash*/))
         }
 
         val allRequestsCount = pojos.size
         var correctRequestsCount = 0
         progressDialog.setProgress(0)
 
-        Log.d(TAG, "start disposable")
         disposable = Observable.concat(pojos)
             .concatWith(sendRaport(service))
             .subscribeOn(Schedulers.io())
             .observeOn(AndroidSchedulers.mainThread())
             .doOnTerminate {
                 progressDialog.hide()
-//                disposable.dispose()
             }
             .subscribe(
                 { result ->
-                    Log.d(TAG, "A: " + result.response)
+                    Log.d(TAG, "RESPONSE: " + result.response)
                     val progress : Int = ((correctRequestsCount ++ / allRequestsCount.toFloat()) * 100).roundToInt()
                     progressDialog.setProgress(progress)
                 },
