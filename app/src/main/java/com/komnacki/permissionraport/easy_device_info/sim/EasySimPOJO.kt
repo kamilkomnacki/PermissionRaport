@@ -11,7 +11,9 @@ class EasySimPOJO : POJO {
         carrier : String,
         isSimNetworkLocked : Int,
         isMultiSim : Int,
-        numberOfActiveSim : Int
+        numberOfActiveSim : Int,
+        apiVersion : Int
+
     ) {
         this.simSerialNumber = simSerialNumber
         this.country = country
@@ -19,6 +21,7 @@ class EasySimPOJO : POJO {
         this.isSimNetworkLocked = isSimNetworkLocked
         this.isMultiSim = isMultiSim
         this.numberOfActiveSim = numberOfActiveSim
+        this.apiVersion = apiVersion
     }
 
     @SerializedName("simSerialNumber")
@@ -39,12 +42,16 @@ class EasySimPOJO : POJO {
     @SerializedName("numberOfActiveSim")
     var numberOfActiveSim : Int? = null
 
+    @SerializedName("apiVersion")
+    var apiVersion : Int? = null
+
     override fun toString() : String {
         return "SIM: simSerialNumber: $simSerialNumber" +
                 ", country: $country" +
                 ", carrier: $carrier" +
                 ", isSimNetworkLocked: $isSimNetworkLocked" +
                 ", isMultiSim: $isMultiSim" +
-                ", numberOfActiveSim: $numberOfActiveSim"
+                ", numberOfActiveSim: $numberOfActiveSim" +
+                ", apiVersion: $apiVersion"
     }
 }

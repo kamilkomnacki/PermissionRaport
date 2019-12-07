@@ -43,7 +43,8 @@ class EasySim : PojoFeeder {
             easySimMod !!.carrier,
             if (easySimMod !!.isSimNetworkLocked) 1 else 0,
             if (isMultiSim) 1 else 0,
-            numberOfActiveSim
+            numberOfActiveSim,
+            android.os.Build.VERSION.SDK_INT
         )
     }
 }
